@@ -13,6 +13,7 @@ import pygame as pg
 # Import local class and methods that are only used for type hinting
 if TYPE_CHECKING:
     from bird import Bird
+    from pipe import Pipe
     from settings import Settings
 
 
@@ -54,17 +55,20 @@ def check_keyup_events(event):
     return
 
 
-def update(bird: Bird, dt: int, settings: Settings):
+def update(bird: Bird, pipe: Pipe, dt: int, settings: Settings):
     """Updates the game items"""
 
     bird.update(settings)
+    pipe.update()
 
 
-def draw(bird: Bird, screen: pg.Surface, settings: Settings):
+def draw(bird: Bird, pipe: Pipe, screen: pg.Surface, settings: Settings):
     """Draw things to the window. Called once per frame."""
     screen.fill(settings.bg_color)
 
     bird.blitme()
+    pipe.blitme()
+    
     pg.display.flip()
 
 

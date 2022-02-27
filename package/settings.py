@@ -19,11 +19,7 @@ class Settings():
 
     def __init__(self):
         """Initialize the game's static settings"""
-
-        self.gravity = 1
-        self.max_velocity = 18
-        self.jump_velocity = 2 * self.max_velocity
-
+        
         # Color dictionary
         self.colors = {}
         self.colors["GREY"] = (125, 125, 125)
@@ -32,6 +28,18 @@ class Settings():
         self.screen_width = 800
         self.screen_height = 800
         self.bg_color = self.colors["GREY"]
+
+        # World settings
+        self.gravity = 1
+        self.world_velocity = 10
+
+        # Bird settings
+        self.max_velocity = 16
+        self.jump_velocity = 2 * self.max_velocity
+
+        # Pipe settings
+        self.pipe_width = 100
+        self.gap_height = 220
 
         # Initialize dynamic variables
         self.init_dynamic_variables()

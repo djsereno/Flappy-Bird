@@ -20,6 +20,7 @@ import pygame as pg
 # Import local classes and methods
 from settings import Settings
 from bird import Bird
+from pipe import Pipe
 import game_functions as gf
 
 # Import local class and methods that are only used for type hinting
@@ -46,12 +47,15 @@ def runPyGame():
     # Create bird
     bird = Bird(screen, settings)
 
+    # Create pipe
+    pipe = Pipe(screen, settings)
+
     # Main game loop
     dt = 1 / fps  # dt is the time since last frame
     while True:
-        gf.checkEvents(bird,settings)
-        gf.update(bird, dt, settings)
-        gf.draw(bird, screen, settings)
+        gf.checkEvents(bird, settings)
+        gf.update(bird, pipe, dt, settings)
+        gf.draw(bird, pipe, screen, settings)
         dt = fpsClock.tick(fps)
 
 
