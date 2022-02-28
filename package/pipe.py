@@ -33,6 +33,7 @@ class Pipe(Sprite):
         self.y = gap_y
         self.velocity = settings.world_velocity
         self.gap_height = settings.gap_height
+        self.location = location
 
         # Image
         if location == "top":
