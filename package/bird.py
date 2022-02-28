@@ -28,6 +28,7 @@ class Bird(pg.sprite.Sprite):
         # Positioning
         self.x = 150
         self.y = self.screen_rect.centery
+        self.accel = settings.gravity
         self.velocity = 0
         self.max_velocity = settings.max_velocity
         self.jump_velocity = settings.jump_velocity
@@ -43,23 +44,20 @@ class Bird(pg.sprite.Sprite):
         # Update the bird's velocity
         self.velocity = -self.jump_velocity
 
-    def update(self, settings: Settings):
+    def update(self):
         """Update the bird"""
 
         # Update the bird's velocity and position
-        new_velocity = self.velocity + settings.gravity
+        new_velocity = self.velocity + self.accel
         self.velocity = gf.clamp(new_velocity, -self.max_velocity,
                                  self.max_velocity)
         self.y += self.velocity
-
-        # Prevent the bird from going off screen
-        if self.y > self.screen_rect.bottom - self.rect.height / 2:
-            self.y = self.screen_rect.bottom - self.rect.height / 2
-            self.velocity = 0
 
         # Update the rect
         self.rect.centery = self.y
 
     def blitme(self):
         """Draw the bird at its current location"""
-        self.screen.blit(self.image, self.rect)
+        # self.screen.blit(self.image, self.rect)
+        pg.draw.rect(self.screen, (0, 0, 255), self.rect)
+        pg.draw.circle(self.screen, (255, 255, 255), (self.x, self.y), 3)

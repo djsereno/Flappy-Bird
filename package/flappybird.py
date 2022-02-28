@@ -6,13 +6,16 @@
 # Audio curtesy of
 #
 # Future updates or improvements:
+#   - Implement frame rate independence
 
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
+from email.headerregistry import Group
 from typing import TYPE_CHECKING
 
 # Import standard modules
 import sys
+import random
 
 # Import non-standard modules
 import pygame as pg
@@ -26,6 +29,7 @@ import game_functions as gf
 # Import local class and methods that are only used for type hinting
 if TYPE_CHECKING:
     pass
+
 
 def runPyGame():
 
@@ -47,15 +51,17 @@ def runPyGame():
     # Create bird
     bird = Bird(screen, settings)
 
-    # Create pipe
-    pipe = Pipe(screen, settings)
+    # Create pipes
+    pipes = pg.sprite.Group()
+    gf.create_new_pipes(pipes, screen, settings)
 
     # Main game loop
-    dt = 1 / fps  # dt is the time since last frame
+    # dt is the time since last frame
+    dt = 1 / fps
     while True:
-        gf.checkEvents(bird, settings)
-        gf.update(bird, pipe, dt, settings)
-        gf.draw(bird, pipe, screen, settings)
+        gf.check_events(bird, settings)
+        gf.update(bird, pipes, dt, screen, settings)
+        gf.draw(bird, pipes, screen, settings)
         dt = fpsClock.tick(fps)
 
 
