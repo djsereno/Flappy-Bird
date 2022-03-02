@@ -1,6 +1,6 @@
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 # Import standard modules
 
@@ -20,7 +20,7 @@ class Button(Sprite):
     def __init__(self, screen: pg.Surface, settings: Settings, message: str,
                  location):
         """Initialize button attributes"""
-        Sprite.__init__(self)
+        super(Button, self).__init__()
         self.screen = screen
         self.screen_rect = screen.get_rect()
 

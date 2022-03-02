@@ -1,6 +1,6 @@
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 # Import standard modules
 
@@ -22,7 +22,7 @@ class Bird(Sprite):
     def __init__(self, screen: pg.Surface, settings: Settings):
         """Initialize the bird's settings"""
 
-        Sprite.__init__(self)
+        super(Bird, self).__init__()
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
 

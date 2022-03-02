@@ -7,11 +7,12 @@
 #
 # Future updates or improvements:
 #   - Implement frame rate independence
+#   - Use collide mask instead of collide rect
 
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
 from email.headerregistry import Group
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 # Import standard modules
 import sys

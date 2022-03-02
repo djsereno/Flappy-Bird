@@ -1,6 +1,6 @@
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 # Import standard modules
 
@@ -22,8 +22,8 @@ class Pipe(Sprite):
                  settings: Settings):
         """Initialize the pipe's settings"""
 
-        # super(Pipe, self).__init__()
-        Sprite.__init__(self)
+        super(Pipe, self).__init__()
+        # Sprite.__init__(self)
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
 
@@ -36,16 +36,20 @@ class Pipe(Sprite):
         self.location = location
 
         # Image
+        self.image: pg.Surface = settings.pipe_img
+        self.rect: pg.Rect = self.image.get_rect()
+
         if location == "top":
-            height = self.y - self.gap_height / 2
-            self.image = pg.Surface((self.width, height))
-            self.rect = self.image.get_rect()
+            # height = self.y - self.gap_height / 2
+            # self.image = pg.Surface((self.width, height))
+            # self.rect = self.image.get_rect()
+            self.image = pg.transform.flip(self.image, False, True)
             self.rect.centerx = self.x
             self.rect.bottom = self.y - self.gap_height / 2
         else:
-            height = self.screen_rect.height - self.y - self.gap_height / 2
-            self.image = pg.Surface((self.width, height))
-            self.rect = self.image.get_rect()
+            # height = self.screen_rect.height - self.y - self.gap_height / 2
+            # self.image = pg.Surface((self.width, height))
+            # self.rect = self.image.get_rect()
             self.rect.centerx = self.x
             self.rect.top = self.y + self.gap_height / 2
 
@@ -60,8 +64,9 @@ class Pipe(Sprite):
         if self.rect.right < self.screen_rect.left:
             self.kill()
 
-    def blitme(self):
-        """Draw the pipe at its current location"""
-        # self.screen.blit(self.image, self.rect)
-        pg.draw.rect(self.screen, (255, 0, 0), self.rect)
-        pg.draw.circle(self.screen, (255, 255, 255), (self.x, self.y), 3)
+    # def blitme(self):
+    #     """Draw the pipe at its current location"""
+    #     # self.screen.blit(self.image, self.rect)
+    #     # pg.draw.rect(self.screen, (255, 0, 0), self.rect)
+    #     # pg.draw.circle(self.screen, (255, 255, 255), (self.x, self.y), 3)
+    #     self.screen.blit(self.image, self.rect)

@@ -1,7 +1,6 @@
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
-from turtle import distance
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 # Import standard modules
 

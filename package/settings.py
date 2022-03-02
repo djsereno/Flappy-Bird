@@ -1,14 +1,16 @@
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
-from turtle import distance
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 # Import standard modules
+import os
+from pathlib import Path
 
 # Import non-standard modules
 import pygame as pg
 
 # Import local classes and methods
+import game_functions as gf
 
 # Import local class and methods that are only used for type hinting
 if TYPE_CHECKING:
@@ -21,18 +23,41 @@ class Settings():
     def __init__(self):
         """Initialize the game's static settings"""
 
+        # File paths
+        # self.common_dir = os.path.dirname(os.path.dirname(__file__))
+        self.common_dir = str(Path(__file__).parents[1])
+        self.images_dir = self.common_dir + "\\assets\\images\\"
+        self.sounds_dir = self.common_dir + "\\assets\\sounds\\"
+
         # Color dictionary
         self.colors = {}
         self.colors["GREY"] = (125, 125, 125)
 
-        # Screen layout settings
-        self.screen_width = 800
-        self.screen_height = 800
-        self.bg_color = self.colors["GREY"]
-
         # World settings
         self.gravity = 1
-        self.world_velocity = 8  # default = 10
+        self.world_velocity = 6  # default = 10
+
+        # Background settings
+        self.bg_velocity = 1
+        self.img_scale = 3
+        self.bg_img = gf.scale_image(self.images_dir + "background_day.png",
+                                     self.img_scale)
+        self.bg_rects = [self.bg_img.get_rect(), self.bg_img.get_rect()]
+        self.bg_rects[1].left = self.bg_rects[0].right
+
+        # Ground settings
+        self.ground_elev = self.bg_rects[0].bottom - 100
+        self.ground_img = gf.scale_image(self.images_dir + "ground.png",
+                                         self.img_scale)
+        self.ground_rects = [self.bg_img.get_rect(), self.bg_img.get_rect()]
+        self.ground_rects[0].top = self.ground_elev
+        self.ground_rects[1].top = self.ground_elev
+        self.ground_rects[1].left = self.ground_rects[0].right
+
+        # Screen layout settings
+        self.screen_width = self.bg_rects[0].width
+        self.screen_height = self.bg_rects[0].height
+        self.bg_color = self.colors["GREY"]
 
         # Bird settings
         self.max_velocity = 14
@@ -45,6 +70,8 @@ class Settings():
         self.gap_y_min = self.gap_height / 2 + 50
         self.gap_y_max = self.screen_height - self.gap_height / 2 - 50
         self.pipe_spacing = 400
+        self.pipe_img = gf.scale_image(self.images_dir + "pipe_green.png",
+                                       self.img_scale)
 
         # Initialize dynamic variables
         self.init_dynamic_variables()

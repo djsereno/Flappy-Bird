@@ -1,6 +1,6 @@
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 # Import standard modules
 import sys
@@ -88,8 +88,14 @@ def check_keyup_events(event: pg.event.Event):
 def update_world(pipes: Pipe, dt: int, screen: pg.Surface, settings: Settings):
     """Moves the pipes accross the screen and adds new pipes as necessary"""
 
+    # Update background images
+    scroll_rects(settings.bg_rects, settings.bg_velocity)
+
     # Update the pipe locations and spawn new pipes as necessary
     pipes.update()
+
+    #Update the ground images
+    scroll_rects(settings.ground_rects, settings.world_velocity)
 
     # Add new pipes if traveled more than pipe spacing limit
     settings.travel_distance += settings.world_velocity
@@ -102,12 +108,19 @@ def draw(bird: Bird, pipes: pg.sprite.Group, buttons: Button,
          screen: pg.Surface, stats: Stats, settings: Settings):
     """Draw things to the window. Called once per frame."""
 
-    screen.fill(settings.bg_color)
+    # screen.fill(settings.bg_color)
+    screen.blit(settings.bg_img, settings.bg_rects[0])
+    screen.blit(settings.bg_img, settings.bg_rects[1])
 
     # Draw the pipes to the screen
-    pipe: Pipe
-    for pipe in pipes:
-        pipe.blitme()
+    # pipe: Pipe
+    # for pipe in pipes:
+    #     pipe.blitme()
+    pipes.draw(screen)
+
+    # Draw the ground
+    screen.blit(settings.ground_img, settings.ground_rects[0])
+    screen.blit(settings.ground_img, settings.ground_rects[1])
 
     # Draw the bird to the screen
     bird.blitme()
@@ -155,9 +168,9 @@ def check_collisions(bird: Bird, pipes: Pipe, settings: Settings):
     upon collision with world object. Sets the game to inactive once the bird has
     landed on the ground."""
 
-    # Check for collisions with pipes and world
+    # Check for collisions with pipes/world
     collision: Pipe = pg.sprite.spritecollideany(bird, pipes)
-    if collision or bird.rect.bottom > bird.screen_rect.bottom \
+    if collision or bird.rect.bottom > settings.ground_elev \
         or bird.rect.top < bird.screen_rect.top:
 
         # Collisions with pipes
@@ -182,8 +195,8 @@ def check_collisions(bird: Bird, pipes: Pipe, settings: Settings):
             bird.rect.top = bird.screen_rect.top
 
         # Collision with ground
-        if bird.rect.bottom > bird.screen_rect.bottom:
-            bird.rect.bottom = bird.screen_rect.bottom
+        if bird.rect.bottom > settings.ground_elev:
+            bird.rect.bottom = settings.ground_elev
             settings.game_active = False
 
         bird.x = bird.rect.centerx
@@ -213,3 +226,24 @@ def start_game(settings: Settings):
 def clamp(value, min_val, max_val):
     """Clamps a value to a given range"""
     return max(min_val, min(max_val, value))
+
+
+def scale_image(image_path: str, scale: float):
+    """Scale an image by a given scale factor and returns the 
+    resulting image and image rect"""
+
+    image: pg.Surface = pg.image.load(image_path)
+    width, height = image.get_rect().size
+    image = pg.transform.scale(image, (width * scale, height * scale))
+    return image
+
+
+def scroll_rects(rects: List[pg.Rect], speed):
+    """Updates the coordinates for a pair of rects stored in a list so that they move accross 
+    the screen at a given speed, wrapping to the other side as necessary"""
+    rects[0].x -= speed
+    rects[1].x -= speed
+    if rects[0].right < 0:
+        rects[0].left = rects[1].right
+    elif rects[1].right < 0:
+        rects[1].left = rects[0].right
