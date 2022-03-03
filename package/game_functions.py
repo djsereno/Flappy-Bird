@@ -247,3 +247,12 @@ def scroll_rects(rects: List[pg.Rect], speed):
         rects[0].left = rects[1].right
     elif rects[1].right < 0:
         rects[1].left = rects[0].right
+
+
+def translate(val, in_min, in_max, out_min, out_max):
+    """Translates or maps a value from one range [in_min, in_max] to a resulting
+    output range [out_min, out_max]"""
+    input_range = in_max - in_min
+    output_range = out_max - out_min
+    capped_val = min(max(val, in_min), in_max)
+    return (capped_val - in_min) / input_range * output_range + out_min

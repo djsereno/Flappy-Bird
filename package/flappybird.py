@@ -8,6 +8,7 @@
 # Future updates or improvements:
 #   - Implement frame rate independence
 #   - Use collide mask instead of collide rect
+#   - Convert images
 
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
@@ -38,7 +39,7 @@ def runPyGame():
 
     # Initialise PyGame
     pg.init()
-
+ 
     # Set up the clock. This will tick every frame and thus maintain a relatively constant framerate.
     fps = 60.0
     fpsClock = pg.time.Clock()
@@ -52,7 +53,7 @@ def runPyGame():
     width, height = settings.screen_width, settings.screen_height
     screen = pg.display.set_mode((width, height))
     pg.display.set_caption("Flappy Bird")
-
+ 
     # Create bird
     bird = Bird(screen, settings)
 

@@ -35,7 +35,7 @@ class Settings():
 
         # World settings
         self.gravity = 1
-        self.world_velocity = 6  # default = 10
+        self.world_velocity = 3  # default = 10
 
         # Background settings
         self.bg_velocity = 1
@@ -62,6 +62,8 @@ class Settings():
         # Bird settings
         self.max_velocity = 14
         self.jump_velocity = 2 * self.max_velocity
+        self.bird_img = gf.scale_image(self.images_dir + "bird-1.png",
+                                       self.img_scale)
 
         # Pipe settings
         self.pipe_width = 100
@@ -71,6 +73,10 @@ class Settings():
         self.gap_y_max = self.screen_height - self.gap_height / 2 - 50
         self.pipe_spacing = 400
         self.pipe_img = gf.scale_image(self.images_dir + "pipe_green.png",
+                                       self.img_scale)
+
+        # UI settings
+        self.score_img = gf.scale_image(self.images_dir + "numbers_big.png",
                                        self.img_scale)
 
         # Initialize dynamic variables
