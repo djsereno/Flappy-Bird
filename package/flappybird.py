@@ -44,15 +44,15 @@ def runPyGame():
     fps = 60.0
     fpsClock = pg.time.Clock()
 
-    # Create stats and settings
+    # Set up the window.
+    width, height = 432, 768
+    screen = pg.display.set_mode((width, height))
+    pg.display.set_caption("Flappy Bird")
+
+   # Create stats and settings
     settings = Settings()
     stats = Stats()
     print(f"Score: {stats.score}, High: {stats.high_score}")
-
-    # Set up the window.
-    width, height = settings.screen_width, settings.screen_height
-    screen = pg.display.set_mode((width, height))
-    pg.display.set_caption("Flappy Bird")
  
     # Create bird
     bird = Bird(screen, settings)
@@ -77,8 +77,8 @@ def runPyGame():
             gf.update_world(pipes, dt, screen, settings)
 
         if settings.game_active:
-            bird.update()
-            gf.check_collisions(bird, pipes, settings)
+            bird.update(dt)
+            # gf.check_collisions(bird, pipes, settings)
             gf.check_score(bird, pipes, stats)
 
         gf.draw(bird, pipes, buttons, screen, stats, settings)

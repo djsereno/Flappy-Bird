@@ -34,7 +34,7 @@ class Settings():
         self.colors["GREY"] = (125, 125, 125)
 
         # World settings
-        self.gravity = 1
+        self.gravity = 0.5
         self.world_velocity = 3  # default = 10
 
         # Background settings
@@ -60,10 +60,11 @@ class Settings():
         self.bg_color = self.colors["GREY"]
 
         # Bird settings
-        self.max_velocity = 14
+        self.max_velocity = 10  # 14
         self.jump_velocity = 2 * self.max_velocity
-        self.bird_img = gf.scale_image(self.images_dir + "bird-1.png",
-                                       self.img_scale)
+        self.bird_sheet = pg.image.load(self.images_dir + "bird_sheet.png")
+        self.bird_frames = gf.get_frames(self.bird_sheet, 3, 17, 12,
+                                         self.img_scale)
 
         # Pipe settings
         self.pipe_width = 100
@@ -77,7 +78,7 @@ class Settings():
 
         # UI settings
         self.score_img = gf.scale_image(self.images_dir + "numbers_big.png",
-                                       self.img_scale)
+                                        self.img_scale)
 
         # Initialize dynamic variables
         self.init_dynamic_variables()

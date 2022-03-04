@@ -32,9 +32,11 @@ class Bird(Sprite):
         self.jump_velocity = settings.jump_velocity
 
         # Image
-        self.image_orig = settings.bird_img
+        self.frames = settings.bird_frames
+        self.image_orig = self.frames[0]
         self.image = self.image_orig.copy()
         self.rect = self.image.get_rect()
+        self.animation_speed = 75
 
         self.init_dynamic_variables()
 
@@ -48,6 +50,8 @@ class Bird(Sprite):
         self.velocity = 0
         self.angle = 0
         self.prev_jump_elev = 0
+        self.current_frame = 0
+        self.animation_time = 0
 
     def flap(self):
         """Jump the bird"""
@@ -56,8 +60,15 @@ class Bird(Sprite):
         self.velocity = -self.jump_velocity
         self.prev_jump_elev = self.y
 
-    def update(self):
+    def update(self, dt: int):
         """Update the bird"""
+
+        # Update the animation
+        self.animation_time += dt
+        if self.animation_time > self.animation_speed:
+            self.animation_time = 0
+            self.current_frame = (self.current_frame + 1) % len(self.frames)
+            self.image_orig = self.frames[self.current_frame]
 
         # Update the bird's velocity and position
         new_velocity = self.velocity + self.accel
@@ -66,14 +77,14 @@ class Bird(Sprite):
         self.y += self.velocity
 
         # Rotate the bird
-        self.angle = gf.translate(self.y, self.prev_jump_elev, self.prev_jump_elev + 150, 20, -90)
+        self.angle = gf.translate(self.y, self.prev_jump_elev,
+                                  self.prev_jump_elev + 150, 20, -90)
         self.image = pg.transform.rotate(self.image_orig, self.angle)
+        self.rect = self.image.get_rect()
 
         # Update the rect
-        self.rect.centery = self.y
+        self.rect.center = self.x, self.y
 
     def blitme(self):
         """Draw the bird at its current location"""
         self.screen.blit(self.image, self.rect)
-        # pg.draw.rect(self.screen, (0, 0, 255), self.rect)
-        # pg.draw.circle(self.screen, (255, 255, 255), (self.x, self.y), 3)

@@ -228,13 +228,28 @@ def clamp(value, min_val, max_val):
     return max(min_val, min(max_val, value))
 
 
+def get_frames(sheet: pg.Surface, n_frames: int, width: int, height: int,
+               scale: float) -> List[pg.Surface]:
+    """Returns a list of frames from a sprite sheet of size (width, height), then 
+    scales by scale factor."""
+    images = []
+    for i in range(n_frames):
+        image = pg.Surface((width, height)).convert_alpha()
+        image.blit(sheet, (0, 0), (i * width, 0, width, height))
+        image = pg.transform.scale(image, (width * scale, height * scale))
+        image.set_colorkey((0, 0, 0))
+        images.append(image)
+    return images
+
+
 def scale_image(image_path: str, scale: float):
     """Scale an image by a given scale factor and returns the 
     resulting image and image rect"""
 
     image: pg.Surface = pg.image.load(image_path)
     width, height = image.get_rect().size
-    image = pg.transform.scale(image, (width * scale, height * scale))
+    image = pg.transform.scale(
+        image, (width * scale, height * scale)).convert_alpha()
     return image
 
 
