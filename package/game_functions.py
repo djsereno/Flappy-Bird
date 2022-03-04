@@ -91,11 +91,11 @@ def update_world(pipes: Pipe, dt: int, screen: pg.Surface, settings: Settings):
     # Update background images
     scroll_rects(settings.bg_rects, settings.bg_velocity)
 
-    # Update the pipe locations and spawn new pipes as necessary
-    pipes.update()
-
     #Update the ground images
     scroll_rects(settings.ground_rects, settings.world_velocity)
+
+    # Update the pipe locations and spawn new pipes as necessary
+    pipes.update()
 
     # Add new pipes if traveled more than pipe spacing limit
     settings.travel_distance += settings.world_velocity
@@ -234,10 +234,10 @@ def get_frames(sheet: pg.Surface, n_frames: int, width: int, height: int,
     scales by scale factor."""
     images = []
     for i in range(n_frames):
-        image = pg.Surface((width, height)).convert_alpha()
+        image = pg.Surface((width, height))
         image.blit(sheet, (0, 0), (i * width, 0, width, height))
-        image = pg.transform.scale(image, (width * scale, height * scale))
         image.set_colorkey((0, 0, 0))
+        image = pg.transform.scale(image, (width * scale, height * scale)).convert_alpha()
         images.append(image)
     return images
 
@@ -246,10 +246,10 @@ def scale_image(image_path: str, scale: float):
     """Scale an image by a given scale factor and returns the 
     resulting image and image rect"""
 
-    image: pg.Surface = pg.image.load(image_path)
+    image: pg.Surface = pg.image.load(image_path).convert_alpha()
     width, height = image.get_rect().size
     image = pg.transform.scale(
-        image, (width * scale, height * scale)).convert_alpha()
+        image, (width * scale, height * scale))
     return image
 
 

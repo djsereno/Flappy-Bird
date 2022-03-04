@@ -60,7 +60,7 @@ class Settings():
         self.bg_color = self.colors["GREY"]
 
         # Bird settings
-        self.max_velocity = 10  # 14
+        self.max_velocity = 9  # 14
         self.jump_velocity = 2 * self.max_velocity
         self.bird_sheet = pg.image.load(self.images_dir + "bird_sheet.png")
         self.bird_frames = gf.get_frames(self.bird_sheet, 3, 17, 12,
@@ -68,7 +68,7 @@ class Settings():
 
         # Pipe settings
         self.pipe_width = 100
-        self.gap_height = 240  # default = 220
+        self.gap_height = 220  # default = 220
         self.min_pipe_height = 50
         self.gap_y_min = self.gap_height / 2 + 50
         self.gap_y_max = self.screen_height - self.gap_height / 2 - 50
