@@ -57,7 +57,7 @@ def check_click_events(buttons: pg.sprite.Group, bird: Bird, pipes: pg.sprite.Gr
         if button.rect.collidepoint(mouse_pos) and left:
 
             # New Game button clicked
-            if not settings.game_active and button.msg == 'New Game':
+            if settings.current_state == 'GAMEOVER' and button.msg == 'New Game':
                 reset_game(bird, pipes, screen, stats, settings)
 
 
@@ -71,11 +71,11 @@ def check_keydown_events(bird: Bird, event: pg.event.Event, settings: Settings):
     # Flap / start the game
     elif event.key == pg.K_SPACE:
 
-        # Start the game if inactive
-        if settings.game_active is None:
+        # Start the game if in READY mode
+        if settings.current_state == 'READY':
             start_game(settings)
 
-        if settings.flying:
+        if settings.current_state == 'PLAY':
             bird.flap()
 
 
@@ -87,20 +87,23 @@ def check_keyup_events(event: pg.event.Event):
 def update_world(pipes: Pipe, dt: int, screen: pg.Surface, settings: Settings):
     """Moves the pipes accross the screen and adds new pipes as necessary"""
 
-    # Update background images
-    scroll_rects(settings.bg_rects, settings.bg_velocity)
+    if settings.current_state != 'GAMEOVER':
 
-    #Update the ground images
-    scroll_rects(settings.ground_rects, settings.world_velocity)
+        # Update background images
+        scroll_rects(settings.bg_rects, settings.bg_velocity)
 
-    # Update the pipe locations and spawn new pipes as necessary
-    pipes.update()
+        #Update the ground images
+        scroll_rects(settings.ground_rects, settings.world_velocity)
 
-    # Add new pipes if traveled more than pipe spacing limit
-    settings.travel_distance += settings.world_velocity
-    if settings.travel_distance > settings.pipe_spacing:
-        create_new_pipes(pipes, screen, settings)
-        settings.travel_distance = 0
+        # Update the pipe locations and spawn new pipes as necessary
+        if settings.current_state == 'PLAY':
+            pipes.update()
+
+            # Add new pipes if traveled more than pipe spacing limit
+            settings.travel_distance += settings.world_velocity
+            if settings.travel_distance > settings.pipe_spacing:
+                create_new_pipes(pipes, screen, settings)
+                settings.travel_distance = 0
 
 
 def draw(bird: Bird, pipes: pg.sprite.Group, buttons: Button, screen: pg.Surface, stats: Stats, settings: Settings):
@@ -121,10 +124,11 @@ def draw(bird: Bird, pipes: pg.sprite.Group, buttons: Button, screen: pg.Surface
     bird.blitme()
 
     # Draw the score to the screen
-    stats.blitme()
+    if settings.current_state in ['READY', 'PLAY']:
+        stats.blitme()
 
     # Display the buttons if the game is inactive
-    if settings.game_active == False:
+    if settings.current_state == 'GAMEOVER':
         button: Button
 
         mouse_pos = pg.mouse.get_pos()
@@ -159,45 +163,18 @@ def check_score(bird: Bird, pipes: pg.sprite.Group, stats: Stats):
 
 
 def check_collisions(bird: Bird, pipes: Pipe, settings: Settings):
-    """Checks for collisions with the bird and the world. Sets flying to false 
-    upon collision with world object. Sets the game to inactive once the bird has
-    landed on the ground."""
+    """Checks for collisions with the bird and the world. Updates the game state 
+    upon collision with world object."""
 
     # Check for collisions with pipes/world
     collision: Pipe = pg.sprite.spritecollideany(bird, pipes)
     if collision or bird.rect.bottom > settings.ground_elev \
         or bird.rect.top < bird.screen_rect.top:
 
-        # Collisions with pipes
-        if collision:
-            # Bird hit side of pipe, adjust so that bird is shifted to left of the pipe rect
-            # If bird hits bottom or top of pipes but overhangs edge of pipe by less than some limit
-            # the bird will still be shifted to left of pipe
-            if bird.rect.right - collision.rect.left < bird.rect.width / 4:
-                bird.rect.right = collision.rect.left
-
-            # Bird hit bottom of top pipe
-            elif bird.rect.top > collision.rect.bottom - bird.max_velocity:
-                bird.rect.top = collision.rect.bottom
-
-            # Bird hit top of bottom pipe
-            elif bird.rect.bottom > collision.rect.top:
-                bird.rect.bottom = collision.rect.top
-                settings.game_active = False
-
-        # Collision with ceiling
-        if bird.rect.top < bird.screen_rect.top:
-            bird.rect.top = bird.screen_rect.top
-
-        # Collision with ground
-        if bird.rect.bottom > settings.ground_elev:
-            bird.rect.bottom = settings.ground_elev
-            settings.game_active = False
-
         bird.x = bird.rect.centerx
         bird.y = bird.rect.centery
         bird.velocity = 0
-        settings.flying = False
+        settings.current_state = 'GAMEOVER'
 
 
 def reset_game(bird: Bird, pipes: pg.sprite.Group, screen: pg.Surface, stats: Stats, settings: Settings):
@@ -213,8 +190,7 @@ def reset_game(bird: Bird, pipes: pg.sprite.Group, screen: pg.Surface, stats: St
 
 def start_game(settings: Settings):
     """Starts the game"""
-    settings.game_active = True
-    settings.flying = True
+    settings.current_state = 'PLAY'
 
 
 def clamp(value, min_val, max_val):

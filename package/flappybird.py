@@ -76,12 +76,11 @@ def runPyGame():
     dt = 1 / fps
     while True:
         gf.check_events(bird, pipes, buttons, screen, stats, settings)
+        gf.update_world(pipes, dt, screen, settings)
+        bird.update(dt, settings)
 
-        if settings.flying:
-            gf.update_world(pipes, dt, screen, settings)
-
-        if settings.game_active:
-            bird.update(dt)
+        # Collisions and score only need to be checked in PLAY state
+        if settings.current_state == 'PLAY':
             gf.check_collisions(bird, pipes, settings)
             gf.check_score(bird, pipes, stats)
 
