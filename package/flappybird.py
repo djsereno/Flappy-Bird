@@ -9,6 +9,10 @@
 #   - Implement frame rate independence
 #   - Use collide mask instead of collide rect
 #   - Convert images
+#   - Game states
+#   - End game screen
+#   - Audio
+#   -
 
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
@@ -47,12 +51,12 @@ def runPyGame():
     # Set up the window.
     width, height = 432, 768
     screen = pg.display.set_mode((width, height))
-    pg.display.set_caption("Flappy Bird")
- 
+    pg.display.set_caption('Flappy Bird')
+
     # Create stats and settings
     settings = Settings()
     stats = Stats(screen, settings)
-    print(f"Score: {stats.score}, High: {stats.high_score}")
+    print(f'Score: {stats.score}, High: {stats.high_score}')
 
     # Create bird
     bird = Bird(screen, settings)
@@ -64,7 +68,7 @@ def runPyGame():
     # Create game buttons
     buttons = pg.sprite.Group()
     button_loc = (screen.get_width() // 2, screen.get_height() // 2)
-    new_game_button = Button(screen, settings, "New Game", button_loc)
+    new_game_button = Button(screen, settings, 'New Game', button_loc)
     buttons.add(new_game_button)
 
     # Main game loop

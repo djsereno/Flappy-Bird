@@ -39,7 +39,7 @@ class Pipe(Sprite):
         self.image: pg.Surface = settings.pipe_img
         self.rect: pg.Rect = self.image.get_rect()
 
-        if location == "top":
+        if location == 'top':
             # height = self.y - self.gap_height / 2
             # self.image = pg.Surface((self.width, height))
             # self.rect = self.image.get_rect()

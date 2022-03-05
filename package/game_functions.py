@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, List
 # Import standard modules
 import sys
 import random
+import os
 
 # Import non-standard modules
 import pygame as pg
@@ -20,8 +21,8 @@ if TYPE_CHECKING:
     from stats import Stats
 
 
-def check_events(bird: Bird, pipes: pg.sprite.Group, buttons: Button,
-                 screen: pg.Surface, stats: Stats, settings: Settings):
+def check_events(bird: Bird, pipes: pg.sprite.Group, buttons: Button, screen: pg.Surface, stats: Stats,
+                 settings: Settings):
     """Check for key events. Called once per frame."""
 
     # Go through events that are passed to the script by the window.
@@ -43,9 +44,8 @@ def check_events(bird: Bird, pipes: pg.sprite.Group, buttons: Button,
             check_click_events(buttons, bird, pipes, screen, stats, settings)
 
 
-def check_click_events(buttons: pg.sprite.Group, bird: Bird,
-                       pipes: pg.sprite.Group, screen: pg.Surface,
-                       stats: Stats, settings: Settings):
+def check_click_events(buttons: pg.sprite.Group, bird: Bird, pipes: pg.sprite.Group, screen: pg.Surface, stats: Stats,
+                       settings: Settings):
     """Respond to mouse clicks"""
 
     left, middle, right = pg.mouse.get_pressed()
@@ -57,12 +57,11 @@ def check_click_events(buttons: pg.sprite.Group, bird: Bird,
         if button.rect.collidepoint(mouse_pos) and left:
 
             # New Game button clicked
-            if not settings.game_active and button.msg == "New Game":
+            if not settings.game_active and button.msg == 'New Game':
                 reset_game(bird, pipes, screen, stats, settings)
 
 
-def check_keydown_events(bird: Bird, event: pg.event.Event,
-                         settings: Settings):
+def check_keydown_events(bird: Bird, event: pg.event.Event, settings: Settings):
     """Respond to keypresses"""
 
     # Quit the game
@@ -104,8 +103,7 @@ def update_world(pipes: Pipe, dt: int, screen: pg.Surface, settings: Settings):
         settings.travel_distance = 0
 
 
-def draw(bird: Bird, pipes: pg.sprite.Group, buttons: Button,
-         screen: pg.Surface, stats: Stats, settings: Settings):
+def draw(bird: Bird, pipes: pg.sprite.Group, buttons: Button, screen: pg.Surface, stats: Stats, settings: Settings):
     """Draw things to the window. Called once per frame."""
 
     # screen.fill(settings.bg_color)
@@ -113,9 +111,6 @@ def draw(bird: Bird, pipes: pg.sprite.Group, buttons: Button,
     screen.blit(settings.bg_img, settings.bg_rects[1])
 
     # Draw the pipes to the screen
-    # pipe: Pipe
-    # for pipe in pipes:
-    #     pipe.blitme()
     pipes.draw(screen)
 
     # Draw the ground
@@ -139,13 +134,12 @@ def draw(bird: Bird, pipes: pg.sprite.Group, buttons: Button,
     pg.display.flip()
 
 
-def create_new_pipes(pipes: pg.sprite.Group, screen: pg.Surface,
-                     settings: Settings):
+def create_new_pipes(pipes: pg.sprite.Group, screen: pg.Surface, settings: Settings):
     """Creates a new randomized pair of pipes and adds them to pipe sprite group"""
 
     gap_y = random.randint(settings.gap_y_min, settings.gap_y_max)
-    top_pipe = Pipe(gap_y, "top", screen, settings)
-    bot_pipe = Pipe(gap_y, "bottom", screen, settings)
+    top_pipe = Pipe(gap_y, 'top', screen, settings)
+    bot_pipe = Pipe(gap_y, 'bottom', screen, settings)
     pipes.add(top_pipe)
     pipes.add(bot_pipe)
 
@@ -156,12 +150,12 @@ def check_score(bird: Bird, pipes: pg.sprite.Group, stats: Stats):
     pipe: Pipe
     for pipe in pipes:
         if bird.rect.left > pipe.rect.right and pipe not in stats.pipes_cleared \
-            and pipe.location == "top":
+            and pipe.location == 'top':
 
             stats.pipes_cleared.add(pipe)
             stats.increase_score()
             stats.check_high_score()
-            print(f"Score: {stats.score}, High: {stats.high_score}")
+            print(f'Score: {stats.score}, High: {stats.high_score}')
 
 
 def check_collisions(bird: Bird, pipes: Pipe, settings: Settings):
@@ -206,8 +200,7 @@ def check_collisions(bird: Bird, pipes: Pipe, settings: Settings):
         settings.flying = False
 
 
-def reset_game(bird: Bird, pipes: pg.sprite.Group, screen: pg.Surface,
-               stats: Stats, settings: Settings):
+def reset_game(bird: Bird, pipes: pg.sprite.Group, screen: pg.Surface, stats: Stats, settings: Settings):
     """Reset all the game parameters"""
 
     settings.init_dynamic_variables()
@@ -229,29 +222,28 @@ def clamp(value, min_val, max_val):
     return max(min_val, min(max_val, value))
 
 
-def get_frames(sheet: pg.Surface, n_frames: int, scale: float,
-               color_key: pg.Color) -> List[pg.Surface]:
-    """Returns a list of frames from a sprite sheet of size (width, height), then 
-    scales by scale factor."""
+def load_frames(sheet: pg.Surface, n_frames: int, color_key: pg.Color) -> List[pg.Surface]:
+    """Returns a list of frames from a sprite sheet of size (width, height)."""
     images = []
     width, height = sheet.get_width() / n_frames, sheet.get_height()
     for i in range(n_frames):
         image = pg.Surface((width, height))
         image.blit(sheet, (0, 0), (i * width, 0, width, height))
+        image.convert_alpha()
         image.set_colorkey(color_key)
-        image = pg.transform.scale(
-            image, (width * scale, height * scale)).convert_alpha()
         images.append(image)
     return images
 
 
-def scale_image(image_path: str, scale: float):
-    """Scale an image by a given scale factor and returns the 
-    resulting image and image rect"""
-
-    image: pg.Surface = pg.image.load(image_path).convert_alpha()
+def load_image(file_name: str, scale: float, path: str, color_key: pg.Color = None):
+    """Scales an image (file_name) saved at path by a given scale factor and returns the resulting image.
+    An RGB color key may be included."""
+    full_path = os.path.abspath(os.path.join(path, file_name))
+    image: pg.Surface = pg.image.load(full_path).convert_alpha()
     width, height = image.get_rect().size
     image = pg.transform.scale(image, (width * scale, height * scale))
+    if color_key:
+        image.set_colorkey(color_key)
     return image
 
 
