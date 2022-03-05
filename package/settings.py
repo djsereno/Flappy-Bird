@@ -88,7 +88,7 @@ class Settings():
 
         # Starting game as None allows user to start flying by pressing space
         # but at the beginning of the game only
-        self.game_active = None
-        self.flying = False
+        # self.game_active = None
+        # self.flying = False
         self.current_state = 'READY'
         self.travel_distance = 0
