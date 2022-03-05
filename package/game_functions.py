@@ -126,6 +126,7 @@ def draw(bird: Bird, pipes: pg.sprite.Group, buttons: Button,
     bird.blitme()
 
     # Draw the score to the screen
+    stats.blitme()
 
     # Display the buttons if the game is inactive
     if settings.game_active == False:
@@ -157,8 +158,8 @@ def check_score(bird: Bird, pipes: pg.sprite.Group, stats: Stats):
         if bird.rect.left > pipe.rect.right and pipe not in stats.pipes_cleared \
             and pipe.location == "top":
 
-            stats.score += 1
             stats.pipes_cleared.add(pipe)
+            stats.increase_score()
             stats.check_high_score()
             print(f"Score: {stats.score}, High: {stats.high_score}")
 
@@ -228,16 +229,18 @@ def clamp(value, min_val, max_val):
     return max(min_val, min(max_val, value))
 
 
-def get_frames(sheet: pg.Surface, n_frames: int, width: int, height: int,
-               scale: float) -> List[pg.Surface]:
+def get_frames(sheet: pg.Surface, n_frames: int, scale: float,
+               color_key: pg.Color) -> List[pg.Surface]:
     """Returns a list of frames from a sprite sheet of size (width, height), then 
     scales by scale factor."""
     images = []
+    width, height = sheet.get_width() / n_frames, sheet.get_height()
     for i in range(n_frames):
         image = pg.Surface((width, height))
         image.blit(sheet, (0, 0), (i * width, 0, width, height))
-        image.set_colorkey((0, 0, 0))
-        image = pg.transform.scale(image, (width * scale, height * scale)).convert_alpha()
+        image.set_colorkey(color_key)
+        image = pg.transform.scale(
+            image, (width * scale, height * scale)).convert_alpha()
         images.append(image)
     return images
 
@@ -248,8 +251,7 @@ def scale_image(image_path: str, scale: float):
 
     image: pg.Surface = pg.image.load(image_path).convert_alpha()
     width, height = image.get_rect().size
-    image = pg.transform.scale(
-        image, (width * scale, height * scale))
+    image = pg.transform.scale(image, (width * scale, height * scale))
     return image
 
 

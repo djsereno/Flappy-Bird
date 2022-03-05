@@ -16,6 +16,10 @@ import game_functions as gf
 if TYPE_CHECKING:
     pass
 
+GREY = (125, 125, 125)
+BLACK = (0, 0, 0)
+PINK = (255, 105, 180)
+
 
 class Settings():
     """A class to store game settings"""
@@ -29,13 +33,14 @@ class Settings():
         self.images_dir = self.common_dir + "\\assets\\images\\"
         self.sounds_dir = self.common_dir + "\\assets\\sounds\\"
 
-        # Color dictionary
-        self.colors = {}
-        self.colors["GREY"] = (125, 125, 125)
+        # # Color dictionary
+        # self.colors = {}
+        # self.colors["GREY"] = (125, 125, 125)
+        # self.colors["BLACK"] = (0, 0, 0)
 
         # World settings
         self.gravity = 0.5
-        self.world_velocity = 3  # default = 10
+        self.world_velocity = 3  # default = 3
 
         # Background settings
         self.bg_velocity = 1
@@ -57,14 +62,13 @@ class Settings():
         # Screen layout settings
         self.screen_width = self.bg_rects[0].width
         self.screen_height = self.bg_rects[0].height
-        self.bg_color = self.colors["GREY"]
+        self.bg_color = GREY
 
         # Bird settings
         self.max_velocity = 9  # 14
         self.jump_velocity = 2 * self.max_velocity
         self.bird_sheet = pg.image.load(self.images_dir + "bird_sheet.png")
-        self.bird_frames = gf.get_frames(self.bird_sheet, 3, 17, 12,
-                                         self.img_scale)
+        self.bird_frames = gf.get_frames(self.bird_sheet, 3, self.img_scale, BLACK)
 
         # Pipe settings
         self.pipe_width = 100
@@ -77,8 +81,8 @@ class Settings():
                                        self.img_scale)
 
         # UI settings
-        self.score_img = gf.scale_image(self.images_dir + "numbers_big.png",
-                                        self.img_scale)
+        self.score_sheet = pg.image.load(self.images_dir + "numbers_big.png")
+        self.score_imgs = gf.get_frames(self.score_sheet, 10, self.img_scale, PINK)
 
         # Initialize dynamic variables
         self.init_dynamic_variables()

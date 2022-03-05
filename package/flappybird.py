@@ -39,7 +39,7 @@ def runPyGame():
 
     # Initialise PyGame
     pg.init()
- 
+
     # Set up the clock. This will tick every frame and thus maintain a relatively constant framerate.
     fps = 60.0
     fpsClock = pg.time.Clock()
@@ -48,12 +48,12 @@ def runPyGame():
     width, height = 432, 768
     screen = pg.display.set_mode((width, height))
     pg.display.set_caption("Flappy Bird")
-
-   # Create stats and settings
-    settings = Settings()
-    stats = Stats()
-    print(f"Score: {stats.score}, High: {stats.high_score}")
  
+    # Create stats and settings
+    settings = Settings()
+    stats = Stats(screen, settings)
+    print(f"Score: {stats.score}, High: {stats.high_score}")
+
     # Create bird
     bird = Bird(screen, settings)
 
@@ -78,7 +78,7 @@ def runPyGame():
 
         if settings.game_active:
             bird.update(dt)
-            # gf.check_collisions(bird, pipes, settings)
+            gf.check_collisions(bird, pipes, settings)
             gf.check_score(bird, pipes, stats)
 
         gf.draw(bird, pipes, buttons, screen, stats, settings)
