@@ -125,10 +125,12 @@ def draw(bird: Bird, pipes: pg.sprite.Group, buttons: Button, screen: pg.Surface
 
     # Draw the score to the screen
     if settings.current_state in ['READY', 'PLAY']:
-        stats.blitme()
+        stats.blit_current_score()
 
     # Display the buttons if the game is inactive
     if settings.current_state == 'GAMEOVER':
+        stats.blit_score_plaque()
+        
         button: Button
 
         mouse_pos = pg.mouse.get_pos()

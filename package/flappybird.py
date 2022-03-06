@@ -67,7 +67,7 @@ def runPyGame():
 
     # Create game buttons
     buttons = pg.sprite.Group()
-    button_loc = (screen.get_width() // 2, screen.get_height() // 2)
+    button_loc = (screen.get_width() // 2, 600)
     new_game_button = Button(screen, settings, 'New Game', button_loc)
     buttons.add(new_game_button)
 
@@ -78,6 +78,11 @@ def runPyGame():
         gf.check_events(bird, pipes, buttons, screen, stats, settings)
         gf.update_world(pipes, dt, screen, settings)
         bird.update(dt, settings)
+
+        ###############
+        settings.current_state = 'GAMEOVER'
+        stats.blit_score_plaque()
+        ###############
 
         # Collisions and score only need to be checked in PLAY state
         if settings.current_state == 'PLAY':

@@ -26,8 +26,22 @@ class Stats(Sprite):
         self.pipes_cleared = pg.sprite.Group()
 
         # Images
-        self.frames = settings.score_imgs
-        self.y = 100
+        self.big_nums_imgs = settings.big_nums_imgs
+        self.y_current_score = 100
+
+        self.plaque = settings.score_plaque
+        self.plaque_rect = self.plaque.get_rect()
+        self.plaque_rect.center = self.screen.get_width() // 2, 400
+
+        self.medal_imgs = settings.medal_imgs
+        self.medal_rect = self.medal_imgs[0].get_rect()
+        self.medal_rect.topleft = self.plaque_rect.left + 39, self.plaque_rect.top + 63
+
+        self.small_nums_imgs = settings.small_nums_imgs
+        self.final_score_rect = self.small_nums_imgs[0].get_rect()
+        self.final_score_rect.topright = self.plaque_rect.left + 309, self.plaque_rect.top + 51
+        self.high_score_rect = self.small_nums_imgs[0].get_rect()
+        self.high_score_rect.topright = self.plaque_rect.left + 309, self.plaque_rect.top + 114
 
         self.init_dynamic_variables()
 
@@ -36,10 +50,21 @@ class Stats(Sprite):
         self.score = 0
         self.blit_sequence: List[Tuple[pg.Surface, pg.Rect]] = []
         self.add_digit()
+        self.medal = self.medal_imgs[0]
 
-    def blitme(self):
-        """Draws the current score to the screen"""
+    def blit_current_score(self):
+        """Draws the current score at the top of the screen"""
         self.screen.blits(self.blit_sequence)
+
+    def blit_score_plaque(self):
+        """Draws the end game score plaque"""
+        self.screen.blit(self.plaque, self.plaque_rect)
+
+        if self.medal:
+            self.screen.blit(self.medal, self.medal_rect)
+
+        self.screen.blit(self.small_nums_imgs[0], self.final_score_rect)
+        self.screen.blit(self.small_nums_imgs[0], self.high_score_rect)
 
     def increase_score(self):
         """Increases the current score and updates the blit sequence"""
@@ -53,7 +78,7 @@ class Stats(Sprite):
         # Update the blit sequence
         score = str(self.score)
         for i in range(len(score)):
-            self.blit_sequence[i][0] = self.frames[int(score[i])]
+            self.blit_sequence[i][0] = self.big_nums_imgs[int(score[i])]
 
     def check_high_score(self):
         """Checks if the current score is the high score. Updates and returns
@@ -65,12 +90,16 @@ class Stats(Sprite):
 
         return False
 
+    def update_medal(self):
+        """Updates the medal to display based on the final score."""
+        self.medal = self.medal_imgs[0]
+
     def add_digit(self):
         """Adds a new digit to the blit sequence and updates all the image rects such 
         that the full sequence is centered on screen with the top of the sequence at y"""
 
         # Add to the blit sequence
-        img = self.frames[0]
+        img = self.big_nums_imgs[0]
         img_rect = img.get_rect()
         self.blit_sequence.append([img, img_rect])
 
@@ -82,4 +111,4 @@ class Stats(Sprite):
         # Update the digit rects
         for i in range(num_digits):
             x = (screen_width - sequence_width) // 2 + i * digit_width
-            self.blit_sequence[i][1].topleft = x, self.y
+            self.blit_sequence[i][1].topleft = x, self.y_current_score

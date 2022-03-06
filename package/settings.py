@@ -76,8 +76,17 @@ class Settings():
         self.pipe_img = gf.load_image('pipe_green.png', self.img_scale, self.images_dir)
 
         # UI settings
-        self.score_sheet = gf.load_image('numbers_big.png', self.img_scale, self.images_dir)
-        self.score_imgs = gf.load_frames(self.score_sheet, 10, PINK)
+        self.big_nums_sheet = gf.load_image('numbers_big.png', self.img_scale, self.images_dir)
+        self.big_nums_imgs = gf.load_frames(self.big_nums_sheet, 10, PINK)
+
+        self.small_nums_sheet = gf.load_image('numbers_small.png', self.img_scale, self.images_dir)
+        self.small_nums_imgs = gf.load_frames(self.small_nums_sheet, 10, PINK)
+
+        self.medal_sheet = gf.load_image('medal_sheet.png', self.img_scale, self.images_dir)
+        self.medal_imgs = gf.load_frames(self.medal_sheet, 4, PINK)
+
+        self.score_plaque = gf.load_image('score_plaque.png', self.img_scale, self.images_dir, PINK)
+        
         self.game_states = ('SPLASH', 'READY', 'PLAY', 'GAMEOVER')
 
         # Initialize dynamic variables
