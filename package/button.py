@@ -1,6 +1,6 @@
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Tuple
 
 # Import standard modules
 
@@ -9,6 +9,7 @@ import pygame as pg
 from pygame.sprite import Sprite
 
 # Import local classes and methods
+import game_functions as gf
 
 # Import local class and methods that are only used for type hinting
 if TYPE_CHECKING:
@@ -16,58 +17,40 @@ if TYPE_CHECKING:
 
 
 class Button(Sprite):
+    """A button class drawn with images"""
 
-    def __init__(self, screen: pg.Surface, settings: Settings, message: str,
-                 location):
+    def __init__(self, action: str, screen: pg.Surface, image: pg.Surface, center_loc: Tuple[int, int]):
         """Initialize button attributes"""
         super(Button, self).__init__()
         self.screen = screen
         self.screen_rect = screen.get_rect()
 
         # Set the dimensions and properties of the button
-        self.width, self.height = 200, 50
-        self.button_color = (200, 200, 200)
-        self.text_color = (0, 255, 0)
-        self.text_color_hover = (255, 255, 0)
-        self.font = pg.font.SysFont(None, 48)
-        self.location = location
-        self.msg = message
+        self.action = action
+        self.location = center_loc
 
-        # Prep the button messgae
-        self.prep_message(False)
-
-        # Build the button's rect object and center it
-        self.width = self.msg_img_rect.width + 20
-        self.height = self.msg_img_rect.height + 20
-        self.rect = pg.Rect(0, 0, self.width, self.height)
+        self.image = image
+        self.rect = self.image.get_rect()
         self.rect.center = self.location
 
-    def prep_message(self, hover: bool):
-        """Turn message into a rendered image and center text on the button"""
+        hover_scale = 1.1
+        self.image_hover = gf.scale_image(self.image, hover_scale)
+        self.rect_hover = self.image_hover.get_rect()
+        self.rect_hover.center = self.location
 
-        # Change text color if hovering or not
-        if hover:
-            color = self.text_color_hover
-        else:
-            color = self.text_color
+        self.init_dynamic_variables()
 
-        self.msg_img = self.font.render(self.msg, True, color,
-                                        self.button_color)
-        self.msg_img_rect: pg.Rect = self.msg_img.get_rect()
-        self.msg_img_rect.center = self.location
+    def init_dynamic_variables(self):
+        """Initializes the birds's dynamic variables"""
+
+        self.active = False  # Controls if button is clickable (doesn't control visibility)
+        self.image.set_alpha(0)  # Button will be faded in later in draw function
 
     def draw(self, mouse_pos: tuple):
         """Draw the button to the screen"""
 
-        # Draw blank button and then draw the message
-        pg.draw.rect(self.screen, self.button_color, self.rect)
-        pg.draw.rect(self.screen, (0, 0, 0), self.rect, 3)
-
         # Prep the message with button highlighting as necessary
-        if self.rect.collidepoint(mouse_pos):
-            self.prep_message(True)
+        if self.rect.collidepoint(mouse_pos) and self.active:
+            self.screen.blit(self.image_hover, self.rect_hover)
         else:
-            self.prep_message(False)
-
-        # Draw the message to screen
-        self.screen.blit(self.msg_img, self.msg_img_rect)
+            self.screen.blit(self.image, self.rect)

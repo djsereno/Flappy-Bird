@@ -1,6 +1,6 @@
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Tuple
 
 # Import standard modules
 import sys
@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     from settings import Settings
     from button import Button
     from stats import Stats
+    from splash import Splash
 
 
 def check_events(bird: Bird, pipes: pg.sprite.Group, buttons: Button, screen: pg.Surface, stats: Stats,
@@ -57,8 +58,8 @@ def check_click_events(buttons: pg.sprite.Group, bird: Bird, pipes: pg.sprite.Gr
         if button.rect.collidepoint(mouse_pos) and left:
 
             # New Game button clicked
-            if settings.current_state == 'GAMEOVER' and button.msg == 'New Game':
-                reset_game(bird, pipes, screen, stats, settings)
+            if settings.current_state == 'GAMEOVER' and button.action == 'new_game' and button.active:
+                reset_game(bird, pipes, buttons, screen, stats, settings)
 
 
 def check_keydown_events(bird: Bird, event: pg.event.Event, settings: Settings):
@@ -89,55 +90,99 @@ def update_world(pipes: Pipe, dt: int, screen: pg.Surface, settings: Settings):
 
     if settings.current_state != 'GAMEOVER':
 
-        # Update background images
-        scroll_rects(settings.bg_rects, settings.bg_velocity)
-
-        #Update the ground images
-        scroll_rects(settings.ground_rects, settings.world_velocity)
+        # Update background and ground images
+        scroll_rects(settings.bg_sequence, settings.bg_velocity)
+        scroll_rects(settings.ground_sequence, settings.world_velocity)
 
         # Update the pipe locations and spawn new pipes as necessary
         if settings.current_state == 'PLAY':
-            pipes.update()
 
-            # Add new pipes if traveled more than pipe spacing limit
-            settings.travel_distance += settings.world_velocity
-            if settings.travel_distance > settings.pipe_spacing:
-                create_new_pipes(pipes, screen, settings)
-                settings.travel_distance = 0
+            if settings.start_delay < settings.max_start_delay:
+                settings.start_delay += dt
+
+            else:
+                pipes.update()
+
+                # Add new pipes if traveled more than pipe spacing limit
+                settings.travel_distance += settings.world_velocity
+                if settings.travel_distance > settings.pipe_spacing:
+                    create_new_pipes(pipes, screen, settings)
+                    settings.travel_distance = 0
 
 
-def draw(bird: Bird, pipes: pg.sprite.Group, buttons: Button, screen: pg.Surface, stats: Stats, settings: Settings):
+def draw(dt: int, bird: Bird, pipes: pg.sprite.Group, buttons: Button, screen: pg.Surface, stats: Stats,
+         settings: Settings, splash: Splash):
     """Draw things to the window. Called once per frame."""
 
-    # screen.fill(settings.bg_color)
-    screen.blit(settings.bg_img, settings.bg_rects[0])
-    screen.blit(settings.bg_img, settings.bg_rects[1])
-
-    # Draw the pipes to the screen
+    screen.fill(settings.bg_color)
+    screen.blits(settings.bg_sequence)
     pipes.draw(screen)
-
-    # Draw the ground
-    screen.blit(settings.ground_img, settings.ground_rects[0])
-    screen.blit(settings.ground_img, settings.ground_rects[1])
-
-    # Draw the bird to the screen
+    screen.blits(settings.ground_sequence)
     bird.blitme()
 
+    # Draw the splash screen
+    if settings.current_state == 'SPLASH':
+        splash.blitme()
+
     # Draw the score to the screen
-    if settings.current_state in ['READY', 'PLAY']:
+    elif settings.current_state in ['READY', 'PLAY']:
         stats.blit_current_score()
 
-    # Display the buttons if the game is inactive
-    if settings.current_state == 'GAMEOVER':
-        stats.blit_score_plaque()
-        
-        button: Button
+        # Display the information idle message:
+        if settings.current_state == 'READY':
 
-        mouse_pos = pg.mouse.get_pos()
-        for button in buttons:
-            button.draw(mouse_pos)
+            if settings.idle_time < settings.idle_msg_delay:
+                settings.idle_time += dt
+
+            else:
+                screen.blit(settings.idle_msg_img, settings.idle_msg_rect)
+                fade(settings.idle_msg_img, 255, 50)
+
+    # Display the buttons if the game is inactive
+    elif settings.current_state == 'GAMEOVER':
+
+        # Dim background content and show score plaque
+        screen.blit(settings.dimmer, settings.dimmer.get_rect())
+        stats.blit_score_plaque(dt, screen)
+        dimmer_done = fade(settings.dimmer, settings.dimmer_max_opacity, 3)
+
+        # Display buttons after stats and dimmer are done animating
+        if dimmer_done and not stats.animating:
+
+            # Fade in 'Game Over' image
+            screen.blit(settings.game_over_img, settings.game_over_rect)
+            fade(settings.game_over_img, 255, 5)
+
+            # Fade in buttons and activate button once done fading in
+            button: Button
+            mouse_pos = pg.mouse.get_pos()
+            for button in buttons:
+                button.draw(mouse_pos)
+                button_done = fade(button.image, 255, 5)
+                if button_done:
+                    button.active = True
 
     pg.display.flip()
+
+
+# def fade_in(surface: pg.Surface, max_alpha: int, fade_in_speed: int):
+#     """Updates a surface's alpha value by fade_in_speed. Returns True if fade-in is complete."""
+#     alpha = surface.get_alpha()
+#     if alpha < max_alpha:
+#         alpha += fade_in_speed
+#         surface.set_alpha(alpha)
+#         return False
+#     return True
+
+
+def fade(surface: pg.Surface, end_alpha: int, alpha_inc: int):
+    """Updates a surface's alpha value by alpha_inc. Returns True if fade is complete."""
+    alpha = surface.get_alpha()
+    if (alpha_inc > 0 and alpha < end_alpha) or (alpha_inc < 0 and alpha > end_alpha):
+        alpha += alpha_inc
+        surface.set_alpha(alpha)
+        return False
+    return True
 
 
 def create_new_pipes(pipes: pg.sprite.Group, screen: pg.Surface, settings: Settings):
@@ -160,11 +205,9 @@ def check_score(bird: Bird, pipes: pg.sprite.Group, stats: Stats):
 
             stats.pipes_cleared.add(pipe)
             stats.increase_score()
-            stats.check_high_score()
-            print(f'Score: {stats.score}, High: {stats.high_score}')
 
 
-def check_collisions(bird: Bird, pipes: Pipe, settings: Settings):
+def check_collisions(bird: Bird, pipes: Pipe, stats: Stats, settings: Settings):
     """Checks for collisions with the bird and the world. Updates the game state 
     upon collision with world object."""
 
@@ -176,18 +219,23 @@ def check_collisions(bird: Bird, pipes: Pipe, settings: Settings):
         bird.x = bird.rect.centerx
         bird.y = bird.rect.centery
         bird.velocity = 0
+        stats.prep_score_plaque()
         settings.current_state = 'GAMEOVER'
 
 
-def reset_game(bird: Bird, pipes: pg.sprite.Group, screen: pg.Surface, stats: Stats, settings: Settings):
-    """Reset all the game parameters"""
+def reset_game(bird: Bird, pipes: pg.sprite.Group, buttons: pg.sprite.Group, screen: pg.Surface, stats: Stats,
+               settings: Settings):
+    """Reset all the game parameters to their initial values"""
 
     settings.init_dynamic_variables()
     stats.init_dynamic_variables()
     bird.init_dynamic_variables()
     pipes.empty()
     create_new_pipes(pipes, screen, settings)
-    # start_game(settings)
+
+    button: Button
+    for button in buttons:
+        button.init_dynamic_variables()
 
 
 def start_game(settings: Settings):
@@ -214,26 +262,33 @@ def load_frames(sheet: pg.Surface, n_frames: int, color_key: pg.Color) -> List[p
 
 
 def load_image(file_name: str, scale: float, path: str, color_key: pg.Color = None):
-    """Scales an image (file_name) saved at path by a given scale factor and returns the resulting image.
+    """Loads an image (file_name) saved at path, scales by a given scale factor, and returns the resulting image.
     An RGB color key may be included."""
     full_path = os.path.abspath(os.path.join(path, file_name))
-    image: pg.Surface = pg.image.load(full_path).convert_alpha()
+    image: pg.Surface = pg.image.load(full_path)
+    image = scale_image(image, scale, color_key)
+    return image
+
+
+def scale_image(image: pg.Surface, scale: float, color_key: pg.Color = None):
+    """Scales an image by a given scale factor, and returns the resulting image.
+    An RGB color key may be included."""
     width, height = image.get_rect().size
-    image = pg.transform.scale(image, (width * scale, height * scale))
+    image = pg.transform.scale(image, (width * scale, height * scale)).convert_alpha()
     if color_key:
         image.set_colorkey(color_key)
     return image
 
 
-def scroll_rects(rects: List[pg.Rect], speed):
+def scroll_rects(blit_sequence: List[Tuple[pg.Surface, pg.Rect]], speed):
     """Updates the coordinates for a pair of rects stored in a list so that they move accross 
     the screen at a given speed, wrapping to the other side as necessary"""
-    rects[0].x -= speed
-    rects[1].x -= speed
-    if rects[0].right < 0:
-        rects[0].left = rects[1].right
-    elif rects[1].right < 0:
-        rects[1].left = rects[0].right
+    blit_sequence[0][1].x -= speed
+    blit_sequence[1][1].x -= speed
+    if blit_sequence[0][1].right < 0:
+        blit_sequence[0][1].left = blit_sequence[1][1].right
+    elif blit_sequence[1][1].right < 0:
+        blit_sequence[1][1].left = blit_sequence[0][1].right
 
 
 def translate(val, in_min, in_max, out_min, out_max):

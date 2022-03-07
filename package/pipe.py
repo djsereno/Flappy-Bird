@@ -18,8 +18,7 @@ if TYPE_CHECKING:
 class Pipe(Sprite):
     """A class for the pipes"""
 
-    def __init__(self, gap_y: int, location: str, screen: pg.Surface,
-                 settings: Settings):
+    def __init__(self, gap_y: int, location: str, screen: pg.Surface, settings: Settings):
         """Initialize the pipe's settings"""
 
         super(Pipe, self).__init__()
@@ -63,10 +62,3 @@ class Pipe(Sprite):
         # Check if pipe is still visible, kill if not
         if self.rect.right < self.screen_rect.left:
             self.kill()
-
-    # def blitme(self):
-    #     """Draw the pipe at its current location"""
-    #     # self.screen.blit(self.image, self.rect)
-    #     # pg.draw.rect(self.screen, (255, 0, 0), self.rect)
-    #     # pg.draw.circle(self.screen, (255, 255, 255), (self.x, self.y), 3)
-    #     self.screen.blit(self.image, self.rect)

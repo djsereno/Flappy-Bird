@@ -6,13 +6,11 @@
 # Audio curtesy of
 #
 # Future updates or improvements:
-#   - Implement frame rate independence
 #   - Use collide mask instead of collide rect
-#   - Convert images
-#   - Game states
-#   - End game screen
+#   - Frame rate independence
 #   - Audio
-#   -
+#   - Leaderboard
+#   - Window scaling
 
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
@@ -32,6 +30,7 @@ from bird import Bird
 from pipe import Pipe
 from button import Button
 from stats import Stats
+from splash import Splash
 import game_functions as gf
 
 # Import local class and methods that are only used for type hinting
@@ -56,7 +55,7 @@ def runPyGame():
     # Create stats and settings
     settings = Settings()
     stats = Stats(screen, settings)
-    print(f'Score: {stats.score}, High: {stats.high_score}')
+    splash = Splash(settings, screen, settings.splash_img, settings.splash_loc)
 
     # Create bird
     bird = Bird(screen, settings)
@@ -67,9 +66,16 @@ def runPyGame():
 
     # Create game buttons
     buttons = pg.sprite.Group()
-    button_loc = (screen.get_width() // 2, 600)
-    new_game_button = Button(screen, settings, 'New Game', button_loc)
-    buttons.add(new_game_button)
+
+    x = stats.plaque_rect.left + settings.play_button_img.get_width() // 2
+    y = stats.plaque_rect.bottom + 27 + settings.play_button_img.get_height() // 2
+    button = Button('new_game', screen, settings.play_button_img, (x, y))
+    buttons.add(button)
+
+    x = stats.plaque_rect.right - settings.leader_button_img.get_width() // 2
+    y = stats.plaque_rect.bottom + 27 + settings.leader_button_img.get_height() // 2
+    button = Button('leaderboard', screen, settings.leader_button_img, (x, y))
+    buttons.add(button)
 
     # Main game loop
     # dt is the time since last frame
@@ -79,17 +85,17 @@ def runPyGame():
         gf.update_world(pipes, dt, screen, settings)
         bird.update(dt, settings)
 
-        ###############
-        settings.current_state = 'GAMEOVER'
-        stats.blit_score_plaque()
-        ###############
+        if settings.current_state == 'SPLASH':
+            splash.update(dt)
+            if not splash.animating:
+                settings.current_state = 'READY'
 
         # Collisions and score only need to be checked in PLAY state
-        if settings.current_state == 'PLAY':
-            gf.check_collisions(bird, pipes, settings)
+        elif settings.current_state == 'PLAY':
+            gf.check_collisions(bird, pipes, stats, settings)
             gf.check_score(bird, pipes, stats)
 
-        gf.draw(bird, pipes, buttons, screen, stats, settings)
+        gf.draw(dt, bird, pipes, buttons, screen, stats, settings, splash)
         dt = fpsClock.tick(fps)
 
 
