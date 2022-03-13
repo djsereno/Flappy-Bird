@@ -86,7 +86,7 @@ def check_keyup_events(event: pg.event.Event):
 
 
 def update_world(pipes: Pipe, dt: int, screen: pg.Surface, settings: Settings):
-    """Moves the pipes accross the screen and adds new pipes as necessary"""
+    """Moves the pipes and background across the screen and adds new pipes as necessary"""
 
     if settings.current_state != 'GAMEOVER':
 
@@ -212,7 +212,7 @@ def check_collisions(bird: Bird, pipes: Pipe, stats: Stats, settings: Settings):
     upon collision with world object."""
 
     # Check for collisions with pipes/world
-    collision: Pipe = pg.sprite.spritecollideany(bird, pipes)
+    collision: Pipe = pg.sprite.spritecollideany(bird, pipes, pg.sprite.collide_mask)
     if collision or bird.rect.bottom > settings.ground_elev \
         or bird.rect.top < bird.screen_rect.top:
 

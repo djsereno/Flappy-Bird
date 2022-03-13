@@ -37,6 +37,7 @@ class Bird(Sprite):
         self.frames = settings.bird_frames
         self.image_orig = self.frames[0]
         self.image = self.image_orig.copy()
+        self.mask = pg.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.animation_speed = 75
         self.idle_period = 3000
@@ -88,7 +89,7 @@ class Bird(Sprite):
         elif settings.current_state in ['PLAY', 'GAMEOVER']:
 
             # Update the bird's velocity and position
-            if self.y < settings.ground_elev - self.rect.height // 2:
+            if self.y < settings.ground_elev:
                 new_velocity = self.velocity + self.accel
                 self.velocity = gf.clamp(new_velocity, -self.max_velocity, self.max_velocity)
                 self.y += self.velocity
@@ -99,11 +100,21 @@ class Bird(Sprite):
         # Update the rect
         self.image = pg.transform.rotate(self.image_orig, self.angle)
         self.rect = self.image.get_rect()
-        if self.rect.bottom > settings.ground_elev:
-            self.rect.bottom = settings.ground_elev
-            self.y = self.rect.centery
         self.rect.center = self.x, self.y
+        self.mask = pg.mask.from_surface(self.image)
 
     def blitme(self):
         """Draw the bird at its current location"""
+        # pg.draw.lines(self.image, (255, 0, 255), True, self.mask.outline())
+        # temp_rect = self.mask.get_bounding_rects()[0]
+        # temp_rect.x += self.rect.x
+        # temp_rect.y += self.rect.y
+        # temp_rect.center = (self.x, self.y)
+        # pg.draw.rect(self.screen, (0, 0, 0), temp_rect)
+
         self.screen.blit(self.image, self.rect)
+
+        # [x, y] = self.mask.centroid()
+        # x += self.rect.x
+        # y += self.rect.y
+        # pg.draw.circle(self.screen, (255, 0, 255), [x, y], 3)

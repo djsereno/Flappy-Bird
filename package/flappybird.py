@@ -6,7 +6,6 @@
 # Audio curtesy of
 #
 # Future updates or improvements:
-#   - Use collide mask instead of collide rect
 #   - Frame rate independence
 #   - Audio
 #   - Leaderboard

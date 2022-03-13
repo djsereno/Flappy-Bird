@@ -37,18 +37,14 @@ class Pipe(Sprite):
         # Image
         self.image: pg.Surface = settings.pipe_img
         self.rect: pg.Rect = self.image.get_rect()
+        self.mask = pg.mask.from_surface(self.image)
+        # pg.draw.lines(self.image, (255, 0, 255), True, self.mask.outline())
 
         if location == 'top':
-            # height = self.y - self.gap_height / 2
-            # self.image = pg.Surface((self.width, height))
-            # self.rect = self.image.get_rect()
             self.image = pg.transform.flip(self.image, False, True)
             self.rect.centerx = self.x
             self.rect.bottom = self.y - self.gap_height / 2
         else:
-            # height = self.screen_rect.height - self.y - self.gap_height / 2
-            # self.image = pg.Surface((self.width, height))
-            # self.rect = self.image.get_rect()
             self.rect.centerx = self.x
             self.rect.top = self.y + self.gap_height / 2
 
