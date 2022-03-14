@@ -34,8 +34,9 @@ class Bird(Sprite):
         self.jump_velocity = settings.jump_velocity
 
         # Image
+        self.color = 0  # 0 = Yellow, 1 = Red, 2 = Blue
         self.frames = settings.bird_frames
-        self.image_orig = self.frames[0]
+        self.image_orig = self.frames[self.color][0]
         self.image = self.image_orig.copy()
         self.mask = pg.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
@@ -48,6 +49,7 @@ class Bird(Sprite):
         self.sfx_flap = settings.sfx_flap
         self.sfx_hit = settings.sfx_hit
         self.sfx_fall = settings.sfx_fall
+        self.sfx_pop = settings.sfx_pop
 
         self.init_dynamic_variables()
 
@@ -73,6 +75,12 @@ class Bird(Sprite):
         self.prev_jump_elev = self.y
         self.sfx_flap.play()
 
+    def change_color(self):
+        """Changes the color of the bird by updating the reference to a new spritesheet"""
+        self.color = (self.color + 1) % len(self.frames)
+        self.sfx_pop.stop()
+        self.sfx_pop.play()
+
     def update(self, dt: int, settings: Settings):
         """Update the bird"""
 
@@ -81,8 +89,8 @@ class Bird(Sprite):
             self.animation_time += dt
             if self.animation_time > self.animation_speed:
                 self.animation_time = 0
-                self.current_frame = (self.current_frame + 1) % len(self.frames)
-                self.image_orig = self.frames[self.current_frame]
+                self.current_frame = (self.current_frame + 1) % len(self.frames[0])
+                self.image_orig = self.frames[self.color][self.current_frame]
 
         # At beginning of game, bird animates smoothly up and down
         if settings.current_state in ['SPLASH', 'READY']:

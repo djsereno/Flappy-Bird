@@ -66,8 +66,8 @@ def runPyGame():
     gf.create_new_pipes(pipes, screen, settings)
 
     # Create background and ground elements
-    background = ScrollElem(settings.bg_img, 0, settings.bg_velocity, screen)
-    ground = ScrollElem(settings.ground_img, settings.ground_elev, settings.world_velocity, screen)
+    background = ScrollElem(settings.bg_imgs, 0, settings.bg_velocity, screen)
+    ground = ScrollElem([settings.ground_img], settings.ground_elev, settings.world_velocity, screen)
 
     # Create game buttons
     buttons = pg.sprite.Group()
@@ -87,7 +87,7 @@ def runPyGame():
     # Main game loop
     dt = 1 / fps
     while True:
-        gf.check_events(bird, pipes, buttons, screen, stats, settings)
+        gf.check_events(bird, pipes, background, buttons, screen, stats, settings)
         gf.update_world(pipes, background, ground, dt, screen, settings)
         bird.update(dt, settings)
 

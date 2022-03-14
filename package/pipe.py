@@ -35,7 +35,9 @@ class Pipe(Sprite):
         self.location = location
 
         # Image
-        self.image: pg.Surface = settings.pipe_img
+        self.color = 0 # 0 = Green, 1 = Red
+        self.images: List[pg.Surface] = settings.pipe_imgs
+        self.image: pg.Surface = self.images[self.color]
         self.rect: pg.Rect = self.image.get_rect()
         self.mask = pg.mask.from_surface(self.image)
         # pg.draw.lines(self.image, (255, 0, 255), True, self.mask.outline())
@@ -48,6 +50,11 @@ class Pipe(Sprite):
             self.rect.centerx = self.x
             self.rect.top = self.y + self.gap_height / 2
 
+    def change_color(self):
+        """Changes the pipe color by updating the index within the images list"""
+        self.color = (self.color + 1) % len(self.images)
+        self.image = self.images[self.color]
+    
     def update(self, dt: int):
         """Update the pipe's location"""
 

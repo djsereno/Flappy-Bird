@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 class ScrollElem(Sprite):
     """A class for continuous scrolling images (e.g. background, ground)"""
 
-    def __init__(self, image: pg.Surface, y: float, velocity: float, screen: pg.Surface):
+    def __init__(self, images: List[pg.Surface], y: float, velocity: float, screen: pg.Surface):
         """Initialize the element's settings"""
 
         super(ScrollElem, self).__init__()
@@ -26,7 +26,9 @@ class ScrollElem(Sprite):
         self.screen_rect = self.screen.get_rect()
 
         # Image
-        self.image = image
+        self.scene = 0
+        self.images: List[pg.Surface] = images
+        self.image: pg.Surface = self.images[self.scene]
         self.num_tiles = self.screen_rect.width // self.image.get_width() + 2
         self.rects: List[pg.Rect] = []
         self.x = []
@@ -38,6 +40,11 @@ class ScrollElem(Sprite):
             rect = self.image.get_rect(x=x, y=y)
             self.x.append(x)
             self.rects.append(rect)
+
+    def change_scene(self):
+        """Changes the scene by updating the index within the images list"""
+        self.scene = (self.scene + 1) % len(self.images)
+        self.image = self.images[self.scene]
 
     def update(self, dt: int):
         """Update the element's location"""

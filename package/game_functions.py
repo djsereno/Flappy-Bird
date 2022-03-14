@@ -23,8 +23,8 @@ if TYPE_CHECKING:
     from scroll_element import ScrollElem
 
 
-def check_events(bird: Bird, pipes: pg.sprite.Group, buttons: Button, screen: pg.Surface, stats: Stats,
-                 settings: Settings):
+def check_events(bird: Bird, pipes: pg.sprite.Group, background: ScrollElem, buttons: Button, screen: pg.Surface,
+                 stats: Stats, settings: Settings):
     """Check for key events. Called once per frame."""
 
     # Go through events that are passed to the script by the window.
@@ -43,19 +43,34 @@ def check_events(bird: Bird, pipes: pg.sprite.Group, buttons: Button, screen: pg
             check_keyup_events(event)
 
         elif event.type == pg.MOUSEBUTTONDOWN:
-            check_click_events(buttons, bird, pipes, screen, stats, settings)
+            check_click_events(buttons, bird, pipes, background, screen, stats, settings)
 
 
-def check_click_events(buttons: pg.sprite.Group, bird: Bird, pipes: pg.sprite.Group, screen: pg.Surface, stats: Stats,
-                       settings: Settings):
+def check_click_events(buttons: pg.sprite.Group, bird: Bird, pipes: pg.sprite.Group, background: ScrollElem,
+                       screen: pg.Surface, stats: Stats, settings: Settings):
     """Respond to mouse clicks"""
 
     left, middle, right = pg.mouse.get_pressed()
     mouse_pos = pg.mouse.get_pos()
 
-    # Start the game if in READY mode
-    if settings.current_state == 'READY' and left:
-        start_game(settings)
+    if settings.current_state in ['SPLASH', 'READY']:
+        
+        # Start the game if in READY mode
+        if left and settings.current_state == 'READY':
+            start_game(settings)
+        
+        # Change bird color
+        elif right:
+            bird.change_color()
+        
+        # Change background night/day and pipe color
+        elif middle:
+            background.change_scene()
+            pipe: Pipe
+            for pipe in pipes:
+                pipe.change_color()
+            settings.sfx_swoosh.stop()
+            settings.sfx_swoosh.play()
 
     if settings.current_state == 'PLAY' and left:
         bird.flap()

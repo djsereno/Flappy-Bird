@@ -46,17 +46,21 @@ class Settings():
         self.bg_color = GREY
 
         # Background settings
+        self.bg_imgs = [self.bg_img_day, self.bg_img_night]
         self.bg_velocity = 1 * 60 / 1000  # default = 1
 
         # Ground settings
         self.ground_elev = self.screen_height - 100
 
         # Bird settings
+        # self.bird_sheet = self.bird_sheet_yellow
+        self.bird_frames = [self.bird_frames_yellow, self.bird_frames_red, self.bird_frames_blue]
         self.max_velocity = 9 * 60 / 1000  # default = 9
         self.jump_velocity = 2 * self.max_velocity
-        self.bird_frames = gf.load_frames(self.bird_sheet, 3, BLACK)
+        # self.bird_frames = gf.load_frames(self.bird_sheet, 3, BLACK)
 
         # Pipe settings
+        self.pipe_imgs = [self.pipe_img_green, self.pipe_img_red]
         self.pipe_width = 100
         self.gap_height = 220  # default = 220
         self.min_pipe_height = 50
@@ -109,10 +113,20 @@ class Settings():
         """Load the game's image assets"""
 
         # Game images
-        self.bg_img = gf.load_image('background_day.png', self.img_scale, self.images_dir)
+        self.bg_img_day = gf.load_image('background_day.png', self.img_scale, self.images_dir)
+        self.bg_img_night = gf.load_image('background_night.png', self.img_scale, self.images_dir)
+
         self.ground_img = gf.load_image('ground.png', self.img_scale, self.images_dir)
-        self.bird_sheet = gf.load_image('bird_sheet.png', self.img_scale, self.images_dir)
-        self.pipe_img = gf.load_image('pipe_green.png', self.img_scale, self.images_dir)
+
+        self.bird_sheet_yellow = gf.load_image('bird_sheet_yellow.png', self.img_scale, self.images_dir)
+        self.bird_frames_yellow = gf.load_frames(self.bird_sheet_yellow, 3, BLACK)
+        self.bird_sheet_red = gf.load_image('bird_sheet_red.png', self.img_scale, self.images_dir)
+        self.bird_frames_red = gf.load_frames(self.bird_sheet_red, 3, BLACK)
+        self.bird_sheet_blue = gf.load_image('bird_sheet_blue.png', self.img_scale, self.images_dir)
+        self.bird_frames_blue = gf.load_frames(self.bird_sheet_blue, 3, BLACK)
+
+        self.pipe_img_green = gf.load_image('pipe_green.png', self.img_scale, self.images_dir)
+        self.pipe_img_red = gf.load_image('pipe_red.png', self.img_scale, self.images_dir)
 
         # Scoreboard images
         self.score_plaque_img = gf.load_image('score_plaque.png', self.img_scale, self.images_dir, PINK)
