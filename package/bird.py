@@ -90,9 +90,9 @@ class Bird(Sprite):
 
             # Update the bird's velocity and position
             if self.y < settings.ground_elev:
-                new_velocity = self.velocity + self.accel
+                new_velocity = self.velocity + self.accel * dt
                 self.velocity = gf.clamp(new_velocity, -self.max_velocity, self.max_velocity)
-                self.y += self.velocity
+                self.y += self.velocity * dt
 
                 # Rotate the bird based on previous jump elevation
                 self.angle = gf.translate(self.y, self.prev_jump_elev, self.prev_jump_elev + 150, 20, -90)
@@ -105,16 +105,4 @@ class Bird(Sprite):
 
     def blitme(self):
         """Draw the bird at its current location"""
-        # pg.draw.lines(self.image, (255, 0, 255), True, self.mask.outline())
-        # temp_rect = self.mask.get_bounding_rects()[0]
-        # temp_rect.x += self.rect.x
-        # temp_rect.y += self.rect.y
-        # temp_rect.center = (self.x, self.y)
-        # pg.draw.rect(self.screen, (0, 0, 0), temp_rect)
-
         self.screen.blit(self.image, self.rect)
-
-        # [x, y] = self.mask.centroid()
-        # x += self.rect.x
-        # y += self.rect.y
-        # pg.draw.circle(self.screen, (255, 0, 255), [x, y], 3)

@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     from button import Button
     from stats import Stats
     from splash import Splash
+    from scroll_element import ScrollElem
 
 
 def check_events(bird: Bird, pipes: pg.sprite.Group, buttons: Button, screen: pg.Surface, stats: Stats,
@@ -85,14 +86,15 @@ def check_keyup_events(event: pg.event.Event):
     return
 
 
-def update_world(pipes: Pipe, dt: int, screen: pg.Surface, settings: Settings):
+def update_world(pipes: Pipe, background: ScrollElem, ground: ScrollElem, dt: int, screen: pg.Surface,
+                 settings: Settings):
     """Moves the pipes and background across the screen and adds new pipes as necessary"""
 
     if settings.current_state != 'GAMEOVER':
 
         # Update background and ground images
-        scroll_rects(settings.bg_sequence, settings.bg_velocity)
-        scroll_rects(settings.ground_sequence, settings.world_velocity)
+        background.update(dt)
+        ground.update(dt)
 
         # Update the pipe locations and spawn new pipes as necessary
         if settings.current_state == 'PLAY':
@@ -101,23 +103,23 @@ def update_world(pipes: Pipe, dt: int, screen: pg.Surface, settings: Settings):
                 settings.start_delay += dt
 
             else:
-                pipes.update()
+                pipes.update(dt)
 
                 # Add new pipes if traveled more than pipe spacing limit
-                settings.travel_distance += settings.world_velocity
+                settings.travel_distance += settings.world_velocity * dt
                 if settings.travel_distance > settings.pipe_spacing:
                     create_new_pipes(pipes, screen, settings)
                     settings.travel_distance = 0
 
 
-def draw(dt: int, bird: Bird, pipes: pg.sprite.Group, buttons: Button, screen: pg.Surface, stats: Stats,
-         settings: Settings, splash: Splash):
+def draw(dt: int, bird: Bird, pipes: pg.sprite.Group, background: ScrollElem, ground: ScrollElem, buttons: Button,
+         screen: pg.Surface, stats: Stats, settings: Settings, splash: Splash):
     """Draw things to the window. Called once per frame."""
 
     screen.fill(settings.bg_color)
-    screen.blits(settings.bg_sequence)
+    background.blitme()
     pipes.draw(screen)
-    screen.blits(settings.ground_sequence)
+    ground.blitme()
     bird.blitme()
 
     # Draw the splash screen
@@ -163,16 +165,6 @@ def draw(dt: int, bird: Bird, pipes: pg.sprite.Group, buttons: Button, screen: p
                     button.active = True
 
     pg.display.flip()
-
-
-# def fade_in(surface: pg.Surface, max_alpha: int, fade_in_speed: int):
-#     """Updates a surface's alpha value by fade_in_speed. Returns True if fade-in is complete."""
-#     alpha = surface.get_alpha()
-#     if alpha < max_alpha:
-#         alpha += fade_in_speed
-#         surface.set_alpha(alpha)
-#         return False
-#     return True
 
 
 def fade(surface: pg.Surface, end_alpha: int, alpha_inc: int):
@@ -278,17 +270,6 @@ def scale_image(image: pg.Surface, scale: float, color_key: pg.Color = None):
     if color_key:
         image.set_colorkey(color_key)
     return image
-
-
-def scroll_rects(blit_sequence: List[Tuple[pg.Surface, pg.Rect]], speed):
-    """Updates the coordinates for a pair of rects stored in a list so that they move accross 
-    the screen at a given speed, wrapping to the other side as necessary"""
-    blit_sequence[0][1].x -= speed
-    blit_sequence[1][1].x -= speed
-    if blit_sequence[0][1].right < 0:
-        blit_sequence[0][1].left = blit_sequence[1][1].right
-    elif blit_sequence[1][1].right < 0:
-        blit_sequence[1][1].left = blit_sequence[0][1].right
 
 
 def translate(val, in_min, in_max, out_min, out_max):

@@ -2,12 +2,12 @@
 # FALPPY BIRD
 # ==============
 # Author: Derek Sereno
-# Images courtesy of
-# Audio curtesy of
+# Images courtesy of "The VG Resource", https://www.spriters-resource.com/mobile/flappybird/sheet/59894/
+# Audio curtesy of "The VG Resource", https://www.sounds-resource.com/mobile/flappybird/sound/5309/
 #
 # Future updates or improvements:
-#   - Frame rate independence
 #   - Audio
+#   - More intuitive start sequence
 #   - Leaderboard
 #   - Window scaling
 
@@ -30,6 +30,7 @@ from pipe import Pipe
 from button import Button
 from stats import Stats
 from splash import Splash
+from scroll_element import ScrollElem
 import game_functions as gf
 
 # Import local class and methods that are only used for type hinting
@@ -52,7 +53,7 @@ def runPyGame():
     pg.display.set_caption('Flappy Bird')
 
     # Create stats and settings
-    settings = Settings()
+    settings = Settings(screen)
     stats = Stats(screen, settings)
     splash = Splash(settings, screen, settings.splash_img, settings.splash_loc)
 
@@ -62,6 +63,10 @@ def runPyGame():
     # Create pipes
     pipes = pg.sprite.Group()
     gf.create_new_pipes(pipes, screen, settings)
+
+    # Create background and ground elements
+    background = ScrollElem(settings.bg_img, 0, settings.bg_velocity, screen)
+    ground = ScrollElem(settings.ground_img, settings.ground_elev, settings.world_velocity, screen)
 
     # Create game buttons
     buttons = pg.sprite.Group()
@@ -81,7 +86,7 @@ def runPyGame():
     dt = 1 / fps
     while True:
         gf.check_events(bird, pipes, buttons, screen, stats, settings)
-        gf.update_world(pipes, dt, screen, settings)
+        gf.update_world(pipes, background, ground, dt, screen, settings)
         bird.update(dt, settings)
 
         if settings.current_state == 'SPLASH':
@@ -94,7 +99,7 @@ def runPyGame():
             gf.check_collisions(bird, pipes, stats, settings)
             gf.check_score(bird, pipes, stats)
 
-        gf.draw(dt, bird, pipes, buttons, screen, stats, settings, splash)
+        gf.draw(dt, bird, pipes, background, ground, buttons, screen, stats, settings, splash)
         dt = fpsClock.tick(fps)
 
 

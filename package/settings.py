@@ -23,7 +23,7 @@ PINK = (255, 105, 180)
 class Settings():
     """A class to store game settings"""
 
-    def __init__(self):
+    def __init__(self, screen: pg.Surface):
         """Initialize the game's static settings"""
 
         # File paths
@@ -36,35 +36,23 @@ class Settings():
         self.load_sound_assets()
 
         # World settings
-        self.gravity = 0.5
-        self.world_velocity = 3  # default = 3
+        self.gravity = 0.5 * 3600 / 1000000  # default = 0.5
+        self.world_velocity = 3 * 60 / 1000  # default = 3
         self.max_start_delay = 1500
         self.idle_msg_delay = 4000
 
-        # Background settings
-        self.bg_velocity = 1
-        bg_rect = self.bg_img.get_rect()
-        self.bg_sequence: List[Tuple[pg.Surface, pg.Rect]] = []
-        self.bg_sequence.append([self.bg_img, bg_rect])
-        self.bg_sequence.append([self.bg_img, bg_rect.copy()])
-        self.bg_sequence[1][1].left = self.bg_sequence[0][1].right
-
-        # Ground settings
-        self.ground_elev = bg_rect.bottom - 100
-        ground_rect = self.ground_img.get_rect()
-        ground_rect.top = self.ground_elev
-        self.ground_sequence: List[Tuple[pg.Surface, pg.Rect]] = []
-        self.ground_sequence.append([self.ground_img, ground_rect])
-        self.ground_sequence.append([self.ground_img, ground_rect.copy()])
-        self.ground_sequence[1][1].left = self.ground_sequence[0][1].right
-
         # Screen layout settings
-        self.screen_width = bg_rect.width
-        self.screen_height = bg_rect.height
+        self.screen_width, self.screen_height = screen.get_size()
         self.bg_color = GREY
 
+        # Background settings
+        self.bg_velocity = 1 * 60 / 1000  # default = 1
+
+        # Ground settings
+        self.ground_elev = self.screen_height - 100
+
         # Bird settings
-        self.max_velocity = 9  # 14
+        self.max_velocity = 9 * 60 / 1000  # default = 9
         self.jump_velocity = 2 * self.max_velocity
         self.bird_frames = gf.load_frames(self.bird_sheet, 3, BLACK)
 

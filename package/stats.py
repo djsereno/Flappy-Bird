@@ -146,7 +146,6 @@ class Stats(Sprite):
 
         # Check if a new digit needs to be added to the blit sequence
         if len(str(self.score)) > len(self.blit_sequence):
-            # self.add_digit()
             self.blit_sequence = self.create_blit_sequence(self.score, self.x_current_score, self.y_current_score,
                                                            self.big_nums_imgs, 'center')
         # Update the blit sequence
@@ -172,22 +171,3 @@ class Stats(Sprite):
         # Bronze >= 10, Silver >= 20, Gold >= 30, Plat >= 40
         if self.score >= 10:
             self.medal = self.medal_imgs[min(self.score // 10 - 1, 3)]
-
-    # def add_digit(self):
-    #     """Adds a new digit to the blit sequence and updates all the image rects such
-    #     that the full sequence is centered on screen with the top of the sequence at y"""
-
-    #     # Add to the blit sequence
-    #     img = self.big_nums_imgs[0]
-    #     img_rect = img.get_rect()
-    #     self.blit_sequence.append([img, img_rect])
-
-    #     num_digits = len(self.blit_sequence)
-    #     digit_width = img_rect.width
-    #     sequence_width = num_digits * digit_width
-    #     screen_width = self.screen.get_width()
-
-    #     # Update the digit rects
-    #     for i in range(num_digits):
-    #         x = (screen_width - sequence_width) // 2 + i * digit_width
-    #         self.blit_sequence[i][1].topleft = x, self.y_current_score

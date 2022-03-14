@@ -48,11 +48,11 @@ class Pipe(Sprite):
             self.rect.centerx = self.x
             self.rect.top = self.y + self.gap_height / 2
 
-    def update(self):
+    def update(self, dt: int):
         """Update the pipe's location"""
 
         # Update the pipe's position
-        self.x -= self.velocity
+        self.x -= self.velocity * dt
         self.rect.centerx = self.x
 
         # Check if pipe is still visible, kill if not
