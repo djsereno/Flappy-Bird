@@ -4,11 +4,11 @@
 # Author: Derek Sereno
 # Images courtesy of "The VG Resource", https://www.spriters-resource.com/mobile/flappybird/sheet/59894/
 # Audio curtesy of "The VG Resource", https://www.sounds-resource.com/mobile/flappybird/sound/5309/
+# Music curtesy of Minetrackmania, https://www.youtube.com/watch?v=vLVRmC-q9Oc&ab_channel=DaviddTech
 #
 # Future updates or improvements:
-#   - Audio
-#   - More intuitive start sequence
 #   - Leaderboard
+#   - Functionality for different backgrounds, pipe colors, bird colors
 #   - Window scaling
 
 # Allow for type hinting while preventing circular imports
@@ -44,16 +44,17 @@ def runPyGame():
     pg.init()
 
     # Set up the clock. This will tick every frame and thus maintain a relatively constant framerate.
-    fps = 60.0
+    fps = 120.0
     fpsClock = pg.time.Clock()
 
     # Set up the window.
-    width, height = 432, 768
-    screen = pg.display.set_mode((width, height))
+    screen_width, screen_height = 480, 720
+    screen = pg.display.set_mode((screen_width, screen_height))
     pg.display.set_caption('Flappy Bird')
 
     # Create stats and settings
     settings = Settings(screen)
+    pg.display.set_icon(settings.icon)
     stats = Stats(screen, settings)
     splash = Splash(settings, screen, settings.splash_img, settings.splash_loc)
 
@@ -71,18 +72,19 @@ def runPyGame():
     # Create game buttons
     buttons = pg.sprite.Group()
 
-    x = stats.plaque_rect.left + settings.play_button_img.get_width() // 2
+    # x = stats.plaque_rect.left + settings.play_button_img.get_width() // 2
+    x = screen_width // 2
     y = stats.plaque_rect.bottom + 27 + settings.play_button_img.get_height() // 2
-    button = Button('new_game', screen, settings.play_button_img, (x, y))
+    button = Button('new_game', screen, settings.play_button_img, (x, y), settings.sfx_pop)
     buttons.add(button)
 
-    x = stats.plaque_rect.right - settings.leader_button_img.get_width() // 2
-    y = stats.plaque_rect.bottom + 27 + settings.leader_button_img.get_height() // 2
-    button = Button('leaderboard', screen, settings.leader_button_img, (x, y))
-    buttons.add(button)
+    # ~~~ Uncomment for leaderboard button. Leaderboard functionality not implemented currently.
+    # x = stats.plaque_rect.right - settings.leader_button_img.get_width() // 2
+    # y = stats.plaque_rect.bottom + 27 + settings.leader_button_img.get_height() // 2
+    # button = Button('leaderboard', screen, settings.leader_button_img, (x, y), settings.sfx_pop)
+    # buttons.add(button)
 
     # Main game loop
-    # dt is the time since last frame
     dt = 1 / fps
     while True:
         gf.check_events(bird, pipes, buttons, screen, stats, settings)

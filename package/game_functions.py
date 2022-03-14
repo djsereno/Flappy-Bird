@@ -53,14 +53,23 @@ def check_click_events(buttons: pg.sprite.Group, bird: Bird, pipes: pg.sprite.Gr
     left, middle, right = pg.mouse.get_pressed()
     mouse_pos = pg.mouse.get_pos()
 
-    # Check for clicked buttons
-    button: Button
-    for button in buttons:
-        if button.rect.collidepoint(mouse_pos) and left:
+    # Start the game if in READY mode
+    if settings.current_state == 'READY' and left:
+        start_game(settings)
 
-            # New Game button clicked
-            if settings.current_state == 'GAMEOVER' and button.action == 'new_game' and button.active:
-                reset_game(bird, pipes, buttons, screen, stats, settings)
+    if settings.current_state == 'PLAY' and left:
+        bird.flap()
+
+    else:
+
+        # Check for clicked buttons
+        button: Button
+        for button in buttons:
+            if button.rect.collidepoint(mouse_pos) and left:
+
+                # New Game button clicked
+                if settings.current_state == 'GAMEOVER' and button.action == 'new_game' and button.active:
+                    reset_game(bird, pipes, buttons, screen, stats, settings)
 
 
 def check_keydown_events(bird: Bird, event: pg.event.Event, settings: Settings):
@@ -124,21 +133,25 @@ def draw(dt: int, bird: Bird, pipes: pg.sprite.Group, background: ScrollElem, gr
 
     # Draw the splash screen
     if settings.current_state == 'SPLASH':
+        screen.blit(settings.dimmer, settings.dimmer.get_rect())
+        fade(settings.dimmer, 0, -3)
         splash.blitme()
 
+    # Display the Get Ready image:
+    elif settings.current_state == 'READY':
+
+        if settings.idle_time < settings.idle_msg_delay:
+            settings.idle_time += dt
+
+        else:
+            screen.blit(settings.get_ready_img, settings.get_ready_rect)
+            screen.blit(settings.idle_msg_img, settings.idle_msg_rect)
+            fade(settings.get_ready_img, 255, 20)
+            fade(settings.idle_msg_img, 255, 20)
+
     # Draw the score to the screen
-    elif settings.current_state in ['READY', 'PLAY']:
+    elif settings.current_state == 'PLAY':
         stats.blit_current_score()
-
-        # Display the information idle message:
-        if settings.current_state == 'READY':
-
-            if settings.idle_time < settings.idle_msg_delay:
-                settings.idle_time += dt
-
-            else:
-                screen.blit(settings.idle_msg_img, settings.idle_msg_rect)
-                fade(settings.idle_msg_img, 255, 50)
 
     # Display the buttons if the game is inactive
     elif settings.current_state == 'GAMEOVER':
@@ -146,10 +159,10 @@ def draw(dt: int, bird: Bird, pipes: pg.sprite.Group, background: ScrollElem, gr
         # Dim background content and show score plaque
         screen.blit(settings.dimmer, settings.dimmer.get_rect())
         stats.blit_score_plaque(dt, screen)
-        dimmer_done = fade(settings.dimmer, settings.dimmer_max_opacity, 3)
+        fade_out_done = fade(settings.dimmer, settings.dimmer_max_opacity, 3)
 
         # Display buttons after stats and dimmer are done animating
-        if dimmer_done and not stats.animating:
+        if fade_out_done and not stats.animating:
 
             # Fade in 'Game Over' image
             screen.blit(settings.game_over_img, settings.game_over_rect)
@@ -208,6 +221,13 @@ def check_collisions(bird: Bird, pipes: Pipe, stats: Stats, settings: Settings):
     if collision or bird.rect.bottom > settings.ground_elev \
         or bird.rect.top < bird.screen_rect.top:
 
+        settings.sfx_music.stop()
+        settings.sfx_music_end.play().set_volume(0.5)
+        bird.sfx_hit.play()
+
+        if not bird.rect.bottom > settings.ground_elev:
+            bird.sfx_fall.play()
+
         bird.x = bird.rect.centerx
         bird.y = bird.rect.centery
         bird.velocity = 0
@@ -219,6 +239,7 @@ def reset_game(bird: Bird, pipes: pg.sprite.Group, buttons: pg.sprite.Group, scr
                settings: Settings):
     """Reset all the game parameters to their initial values"""
 
+    settings.sfx_swoosh.play()
     settings.init_dynamic_variables()
     stats.init_dynamic_variables()
     bird.init_dynamic_variables()
@@ -260,6 +281,13 @@ def load_image(file_name: str, scale: float, path: str, color_key: pg.Color = No
     image: pg.Surface = pg.image.load(full_path)
     image = scale_image(image, scale, color_key)
     return image
+
+
+def load_sound(file_name: str, path: str):
+    """Loads a sound (file_name) saved at path and returns the resulting sound."""
+    full_path = os.path.abspath(os.path.join(path, file_name))
+    sound = pg.mixer.Sound(full_path)
+    return sound
 
 
 def scale_image(image: pg.Surface, scale: float, color_key: pg.Color = None):

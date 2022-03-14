@@ -39,7 +39,7 @@ class Settings():
         self.gravity = 0.5 * 3600 / 1000000  # default = 0.5
         self.world_velocity = 3 * 60 / 1000  # default = 3
         self.max_start_delay = 1500
-        self.idle_msg_delay = 4000
+        self.idle_msg_delay = 1000
 
         # Screen layout settings
         self.screen_width, self.screen_height = screen.get_size()
@@ -65,33 +65,45 @@ class Settings():
         self.pipe_spacing = 400
 
         # UI settings
-        self.splash_loc = (self.screen_width // 2, 250)
+        self.splash_loc = (self.screen_width // 2, 200)
+
+        self.get_ready_rect = self.get_ready_img.get_rect()
+        self.get_ready_rect.center = self.screen_width // 2, 200
+
         self.idle_msg_rect = self.idle_msg_img.get_rect()
         self.idle_msg_rect.midbottom = self.screen_width // 2, self.screen_height - 125
+
         self.game_over_rect = self.game_over_img.get_rect()
         self.game_over_rect.midbottom = self.screen_width // 2, 250
+
         self.big_nums_imgs = gf.load_frames(self.big_nums_sheet, 10, PINK)
         self.small_nums_imgs = gf.load_frames(self.small_nums_sheet, 10, PINK)
         self.medal_imgs = gf.load_frames(self.medal_sheet, 4, PINK)
         self.game_states = ('SPLASH', 'READY', 'PLAY', 'GAMEOVER')
+
         self.dimmer = pg.Surface((self.screen_width, self.screen_height), pg.SRCALPHA)
         self.dimmer.fill((0, 0, 0))
         self.dimmer_max_opacity = 100
 
         # Initialize dynamic variables
         self.init_dynamic_variables()
+
+        # Dynamic variable initilization (for game start only)
         self.current_state = 'SPLASH'
+        self.dimmer.set_alpha(255)
         self.start_delay = 0
 
     def init_dynamic_variables(self):
         """Initializes the game's dynamic variables"""
 
+        self.sfx_music.play(loops=-1, fade_ms=2000)
         self.current_state = 'READY'
         self.travel_distance = 0
-        self.dimmer.set_alpha(0)
-        self.game_over_img.set_alpha(0)
         self.idle_time = 0
+        self.get_ready_img.set_alpha(0)
         self.idle_msg_img.set_alpha(0)
+        self.game_over_img.set_alpha(0)
+        self.dimmer.set_alpha(0)
 
     def load_image_assets(self):
         """Load the game's image assets"""
@@ -112,8 +124,9 @@ class Settings():
         # UI Images
         self.icon = gf.load_image('bird_icon.png', self.img_scale, self.images_dir)
         self.splash_img = gf.load_image('splash.png', self.img_scale, self.images_dir)
+        self.get_ready_img = gf.load_image('get_ready.png', self.img_scale, self.images_dir)
         self.game_over_img = gf.load_image('game_over.png', self.img_scale, self.images_dir)
-        self.idle_msg_img = gf.load_image('press_space.png', self.img_scale, self.images_dir, PINK)
+        self.idle_msg_img = gf.load_image('click_mouse.png', self.img_scale, self.images_dir, PINK)
 
         # Buttons
         self.play_button_img = gf.load_image('play_button.png', self.img_scale, self.images_dir, PINK)
@@ -121,4 +134,15 @@ class Settings():
 
     def load_sound_assets(self):
         """Load the game's sound assets"""
-        pass
+
+        self.sfx_fall = gf.load_sound('sfx_fall_delayed.wav', self.sounds_dir)
+        self.sfx_hit = gf.load_sound('sfx_hit.wav', self.sounds_dir)
+        self.sfx_point = gf.load_sound('sfx_point.wav', self.sounds_dir)
+        self.sfx_swoosh = gf.load_sound('sfx_swoosh.wav', self.sounds_dir)
+        self.sfx_flap = gf.load_sound('sfx_flap.wav', self.sounds_dir)
+        self.sfx_pop = gf.load_sound('sfx_pop.wav', self.sounds_dir)
+        self.sfx_music = gf.load_sound('sfx_music.wav', self.sounds_dir)
+        self.sfx_music_end = gf.load_sound('sfx_music_end.wav', self.sounds_dir)
+
+        self.sfx_music.set_volume(0.5)
+        self.sfx_music_end.set_volume(0.5)

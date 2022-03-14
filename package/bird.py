@@ -44,6 +44,11 @@ class Bird(Sprite):
         self.idle_amp = 50
         self.y_0 = self.screen_rect.centery
 
+        # Sound effects
+        self.sfx_flap = settings.sfx_flap
+        self.sfx_hit = settings.sfx_hit
+        self.sfx_fall = settings.sfx_fall
+
         self.init_dynamic_variables()
 
     def init_dynamic_variables(self):
@@ -66,6 +71,7 @@ class Bird(Sprite):
         # Update the bird's velocity
         self.velocity = -self.jump_velocity
         self.prev_jump_elev = self.y
+        self.sfx_flap.play()
 
     def update(self, dt: int, settings: Settings):
         """Update the bird"""

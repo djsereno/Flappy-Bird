@@ -51,6 +51,9 @@ class Stats(Sprite):
 
         self.fade_in_time = 500
 
+        # Sound effects
+        self.sfx_point = settings.sfx_point
+
         self.init_dynamic_variables()
 
     def init_dynamic_variables(self):
@@ -143,6 +146,7 @@ class Stats(Sprite):
         """Increases the current score and updates the blit sequence"""
 
         self.score += 1
+        self.sfx_point.play()
 
         # Check if a new digit needs to be added to the blit sequence
         if len(str(self.score)) > len(self.blit_sequence):

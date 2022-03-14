@@ -30,7 +30,7 @@ class Splash(Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = center_loc
         self.fade_speed = 10
-        self.delay = [1000, 2000, 1000]  # before fade-in, after fade-in, after fade-out
+        self.delay = [2000, 2000, 0]  # before fade-in, after fade-in, after fade-out
         # self.delay = [0, 0, 0]
 
         self.init_dynamic_variables()

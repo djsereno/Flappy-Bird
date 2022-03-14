@@ -19,7 +19,8 @@ if TYPE_CHECKING:
 class Button(Sprite):
     """A button class drawn with images"""
 
-    def __init__(self, action: str, screen: pg.Surface, image: pg.Surface, center_loc: Tuple[int, int]):
+    def __init__(self, action: str, screen: pg.Surface, image: pg.Surface, center_loc: Tuple[int, int],
+                 sfx: pg.mixer.Sound):
         """Initialize button attributes"""
         super(Button, self).__init__()
         self.screen = screen
@@ -37,6 +38,10 @@ class Button(Sprite):
         self.image_hover = gf.scale_image(self.image, hover_scale)
         self.rect_hover = self.image_hover.get_rect()
         self.rect_hover.center = self.location
+        self.hover = False
+
+        # Sound effects
+        self.sfx_hover = sfx
 
         self.init_dynamic_variables()
 
@@ -51,6 +56,10 @@ class Button(Sprite):
 
         # Prep the message with button highlighting as necessary
         if self.rect.collidepoint(mouse_pos) and self.active:
+            if not self.hover:
+                self.hover = True
+                self.sfx_hover.play()
             self.screen.blit(self.image_hover, self.rect_hover)
         else:
+            self.hover = False
             self.screen.blit(self.image, self.rect)
