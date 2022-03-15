@@ -1,6 +1,6 @@
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
-from typing import TYPE_CHECKING, List, Tuple
+from typing import TYPE_CHECKING, List
 
 # Import standard modules
 import os
@@ -17,6 +17,7 @@ if TYPE_CHECKING:
 
 GREY = (125, 125, 125)
 BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 PINK = (255, 105, 180)
 
 
@@ -37,39 +38,41 @@ class Settings():
 
         # World settings
         self.gravity = 0.5 * 3600 / 1000000  # default = 0.5
-        self.world_velocity = 3 * 60 / 1000  # default = 3
+        self.world_velocity = 3.5 * 60 / 1000  # default = 3.5
         self.max_start_delay = 1500
-        self.idle_msg_delay = 1000
+        self.get_ready_delay = 1000
 
         # Screen layout settings
         self.screen_width, self.screen_height = screen.get_size()
         self.bg_color = GREY
 
         # Background settings
-        self.bg_imgs = [self.bg_img_day, self.bg_img_night]
-        self.scene = 0 # 0 = Day, 1 = Night
-        self.bg_img = self.bg_imgs[self.scene]
         self.bg_velocity = 1 * 60 / 1000  # default = 1
+        self.scene = 0  # 0 = Day, 1 = Night
+        self.bg_imgs = [self.bg_img_day, self.bg_img_night]
+        self.bg_img = self.bg_imgs[self.scene]
 
         # Ground settings
         self.ground_elev = self.screen_height - 100
 
         # Bird settings
-        self.bird_frames = [self.bird_frames_yellow, self.bird_frames_red, self.bird_frames_blue]
         self.max_velocity = 9 * 60 / 1000  # default = 9
         self.jump_velocity = 2 * self.max_velocity
+        self.bird_frames = [self.bird_frames_yellow, self.bird_frames_red, self.bird_frames_blue]
 
         # Pipe settings
-        self.pipe_imgs = [[self.pipe_img_green, self.pipe_img_red],
-                          [pg.transform.flip(self.pipe_img_green, False, True),
-                           pg.transform.flip(self.pipe_img_red, False, True)]]
-        self.pipe_color = 0 # 0 = Green, 1 = Red
-        self.pipe_width = 100
-        self.gap_height = 220  # default = 220
-        self.min_pipe_height = 50
-        self.gap_y_min = self.gap_height / 2 + 50
-        self.gap_y_max = self.screen_height - self.gap_height / 2 - 50
-        self.pipe_spacing = 400
+        self.gap_height = 180  # default = 180
+        self.pipe_spacing = 275  # default = 275
+        min_pipe_height = 50
+        self.gap_y_min = self.gap_height / 2 + min_pipe_height
+        self.gap_y_max = self.ground_elev - self.gap_height / 2 - min_pipe_height
+        self.pipe_color = 0  # 0 = Green, 1 = Red
+        self.pipe_imgs: List[List[pg.Surface]] = [[self.pipe_img_green, self.pipe_img_red],
+                                                  [
+                                                      pg.transform.flip(self.pipe_img_green, False, True),
+                                                      pg.transform.flip(self.pipe_img_red, False, True)
+                                                  ]]
+        self.pipe_width = self.pipe_imgs[0][0].get_rect().width
 
         # UI settings
         self.splash_loc = (self.screen_width // 2, 200)
@@ -89,7 +92,8 @@ class Settings():
         self.game_states = ('SPLASH', 'READY', 'PLAY', 'GAMEOVER')
 
         self.dimmer = pg.Surface((self.screen_width, self.screen_height), pg.SRCALPHA)
-        self.dimmer.fill((0, 0, 0))
+        self.dimmer.fill(BLACK)
+        self.dimmer_rect = self.dimmer.get_rect()
         self.dimmer_max_opacity = 100
 
         # Initialize dynamic variables
@@ -161,5 +165,6 @@ class Settings():
         self.sfx_music = gf.load_sound('sfx_music.wav', self.sounds_dir)
         self.sfx_music_end = gf.load_sound('sfx_music_end.wav', self.sounds_dir)
 
+        # Set music volume
         self.sfx_music.set_volume(0.5)
         self.sfx_music_end.set_volume(0.5)

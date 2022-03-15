@@ -1,6 +1,6 @@
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
-from typing import TYPE_CHECKING, List, Tuple
+from typing import TYPE_CHECKING, List
 
 # Import standard modules
 
@@ -17,10 +17,11 @@ if TYPE_CHECKING:
 
 
 class Stats(Sprite):
-    """A class to store game stats"""
+    """A class to store game stats and handle scoring"""
 
     def __init__(self, screen: pg.Surface, settings: Settings):
         """Initialize the game's stats"""
+        
         super(Stats, self).__init__()
         self.screen = screen
         self.pipes_cleared = pg.sprite.Group()
@@ -57,7 +58,8 @@ class Stats(Sprite):
         self.init_dynamic_variables()
 
     def init_dynamic_variables(self):
-        """Initializes the game's dynamic variables"""
+        """Initializes the game's dynamic stat variables"""
+        
         self.score = 0
         self.new_high_score = False
         self.plaque = self.plaque_orig.copy()
@@ -69,6 +71,7 @@ class Stats(Sprite):
 
     def blit_current_score(self):
         """Draws the current score at the top of the screen"""
+        
         self.screen.blits(self.blit_sequence)
 
     def prep_score_plaque(self):

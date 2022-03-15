@@ -1,6 +1,6 @@
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
-from typing import TYPE_CHECKING, List, Tuple
+from typing import TYPE_CHECKING, Tuple
 
 # Import standard modules
 
@@ -13,7 +13,7 @@ import game_functions as gf
 
 # Import local class and methods that are only used for type hinting
 if TYPE_CHECKING:
-    from settings import Settings
+    pass
 
 
 class Button(Sprite):
@@ -22,6 +22,7 @@ class Button(Sprite):
     def __init__(self, action: str, screen: pg.Surface, image: pg.Surface, center_loc: Tuple[int, int],
                  sfx: pg.mixer.Sound):
         """Initialize button attributes"""
+        
         super(Button, self).__init__()
         self.screen = screen
         self.screen_rect = screen.get_rect()
@@ -46,18 +47,19 @@ class Button(Sprite):
         self.init_dynamic_variables()
 
     def init_dynamic_variables(self):
-        """Initializes the birds's dynamic variables"""
+        """Initializes the button's dynamic variables"""
 
         self.active = False  # Controls if button is clickable (doesn't control visibility)
         self.image.set_alpha(0)  # Button will be faded in later in draw function
 
     def draw(self, mouse_pos: tuple):
-        """Draw the button to the screen"""
+        """Draw the button to the screen. Mouse_pos will affect hover behavior"""
 
         # Prep the message with button highlighting as necessary
         if self.rect.collidepoint(mouse_pos) and self.active:
             if not self.hover:
                 self.hover = True
+                self.sfx_hover.stop()
                 self.sfx_hover.play()
             self.screen.blit(self.image_hover, self.rect_hover)
         else:

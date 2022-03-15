@@ -12,7 +12,6 @@
 
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
-from typing import TYPE_CHECKING, List
 
 # Import standard modules
 
@@ -47,14 +46,13 @@ def runPyGame():
     settings = Settings(screen)
     pg.display.set_icon(settings.icon)
     stats = Stats(screen, settings)
-    splash = Splash(settings, screen, settings.splash_img, settings.splash_loc)
+    splash = Splash(screen, settings.splash_img, settings.splash_loc)
 
     # Create bird
     bird = Bird(screen, settings)
 
     # Create pipes
     pipes = pg.sprite.Group()
-    # gf.create_new_pipes(pipes, screen, settings)
 
     # Create background and ground elements
     background = ScrollElem(settings.bg_imgs, 0, settings.bg_velocity, screen)
@@ -63,17 +61,17 @@ def runPyGame():
     # Create game buttons
     buttons = pg.sprite.Group()
 
-    # x = stats.plaque_rect.left + settings.play_button_img.get_width() // 2
-    x = screen_width // 2
-    y = stats.plaque_rect.bottom + 27 + settings.play_button_img.get_height() // 2
-    button = Button('new_game', screen, settings.play_button_img, (x, y), settings.sfx_pop)
-    buttons.add(button)
-
     # ~~~ Uncomment for leaderboard button. Leaderboard functionality not implemented currently.
     # x = stats.plaque_rect.right - settings.leader_button_img.get_width() // 2
     # y = stats.plaque_rect.bottom + 27 + settings.leader_button_img.get_height() // 2
     # button = Button('leaderboard', screen, settings.leader_button_img, (x, y), settings.sfx_pop)
     # buttons.add(button)
+
+    # x = stats.plaque_rect.left + settings.play_button_img.get_width() // 2
+    x = screen_width // 2
+    y = stats.plaque_rect.bottom + 27 + settings.play_button_img.get_height() // 2
+    button = Button('new_game', screen, settings.play_button_img, (x, y), settings.sfx_pop)
+    buttons.add(button)
 
     # Main game loop
     dt = 1 / fps

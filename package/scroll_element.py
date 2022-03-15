@@ -1,6 +1,6 @@
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
-from typing import TYPE_CHECKING, List, Tuple
+from typing import TYPE_CHECKING, List
 
 # Import standard modules
 
@@ -12,11 +12,11 @@ from pygame.sprite import Sprite
 
 # Import local class and methods that are only used for type hinting
 if TYPE_CHECKING:
-    from settings import Settings
+    pass
 
 
 class ScrollElem(Sprite):
-    """A class for continuous scrolling images (e.g. background, ground)"""
+    """A class for continuously scrolling images (e.g. background, ground)"""
 
     def __init__(self, images: List[pg.Surface], y: float, velocity: float, screen: pg.Surface):
         """Initialize the element's settings"""
@@ -43,6 +43,7 @@ class ScrollElem(Sprite):
 
     def change_scene(self):
         """Changes the scene by updating the index within the images list"""
+        
         self.scene = (self.scene + 1) % len(self.images)
         self.image = self.images[self.scene]
 
@@ -62,5 +63,6 @@ class ScrollElem(Sprite):
 
     def blitme(self):
         """Draws the scrolling images to the screen"""
+        
         for i in range(self.num_tiles):
             self.screen.blit(self.image, self.rects[i])

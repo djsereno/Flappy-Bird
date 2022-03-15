@@ -1,6 +1,6 @@
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 # Import standard modules
 import math
@@ -76,13 +76,14 @@ class Bird(Sprite):
         self.sfx_flap.play()
 
     def change_color(self):
-        """Changes the color of the bird by updating the reference to a new spritesheet"""
+        """Changes the color of the bird by updating the reference to a new spritesheet and plays the sound effect"""
+        
         self.color = (self.color + 1) % len(self.frames)
         self.sfx_pop.stop()
         self.sfx_pop.play()
 
     def update(self, dt: int, settings: Settings):
-        """Update the bird"""
+        """Update the bird's animation and location"""
 
         # Update the animation
         if settings.current_state != 'GAMEOVER':
@@ -119,4 +120,5 @@ class Bird(Sprite):
 
     def blitme(self):
         """Draw the bird at its current location"""
+        
         self.screen.blit(self.image, self.rect)

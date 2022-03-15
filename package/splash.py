@@ -1,6 +1,6 @@
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
-from typing import TYPE_CHECKING, List, Tuple
+from typing import TYPE_CHECKING, Tuple
 
 # Import standard modules
 
@@ -13,13 +13,13 @@ import game_functions as gf
 
 # Import local class and methods that are only used for type hinting
 if TYPE_CHECKING:
-    from settings import Settings
+    pass
 
 
 class Splash(Sprite):
     """A splash screen class"""
 
-    def __init__(self, settings: Settings, screen: pg.Surface, image: pg.Surface, center_loc: Tuple[int, int]):
+    def __init__(self, screen: pg.Surface, image: pg.Surface, center_loc: Tuple[int, int]):
         """Initialize splash screen attributes"""
         super(Splash, self).__init__()
         self.screen = screen
@@ -31,7 +31,6 @@ class Splash(Sprite):
         self.rect.center = center_loc
         self.fade_speed = 10
         self.delay = [2000, 2000, 0]  # before fade-in, after fade-in, after fade-out
-        # self.delay = [0, 0, 0]
 
         self.init_dynamic_variables()
 
@@ -47,19 +46,26 @@ class Splash(Sprite):
     def update(self, dt: int):
         """Update the splash screen animation"""
 
+        # Delay before fade-in
         if self.animation_time[0] < self.delay[0]:
             self.animation_time[0] += dt
+        # Fade-in
         elif not self.fade_in:
-            self.fade_in = gf.fade(self.image, 255, self.fade_speed)
+            self.fade_in = gf.fade_surface(self.image, 255, self.fade_speed)
+        # Display splash / delay before fade out
         elif self.animation_time[1] < self.delay[1]:
             self.animation_time[1] += dt
+        # Fade-out
         elif not self.fade_out:
-            self.fade_out = gf.fade(self.image, 0, -self.fade_speed)
+            self.fade_out = gf.fade_surface(self.image, 0, -self.fade_speed)
+        # Delay after fade out
         elif self.animation_time[2] < self.delay[2]:
             self.animation_time[2] += dt
+        # Done
         else:
             self.animating = False
 
     def blitme(self):
         """Draw the splash screen to the screen"""
+        
         self.screen.blit(self.image, self.rect)
