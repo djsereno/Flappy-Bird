@@ -47,20 +47,23 @@ class Settings():
 
         # Background settings
         self.bg_imgs = [self.bg_img_day, self.bg_img_night]
+        self.scene = 0 # 0 = Day, 1 = Night
+        self.bg_img = self.bg_imgs[self.scene]
         self.bg_velocity = 1 * 60 / 1000  # default = 1
 
         # Ground settings
         self.ground_elev = self.screen_height - 100
 
         # Bird settings
-        # self.bird_sheet = self.bird_sheet_yellow
         self.bird_frames = [self.bird_frames_yellow, self.bird_frames_red, self.bird_frames_blue]
         self.max_velocity = 9 * 60 / 1000  # default = 9
         self.jump_velocity = 2 * self.max_velocity
-        # self.bird_frames = gf.load_frames(self.bird_sheet, 3, BLACK)
 
         # Pipe settings
-        self.pipe_imgs = [self.pipe_img_green, self.pipe_img_red]
+        self.pipe_imgs = [[self.pipe_img_green, self.pipe_img_red],
+                          [pg.transform.flip(self.pipe_img_green, False, True),
+                           pg.transform.flip(self.pipe_img_red, False, True)]]
+        self.pipe_color = 0 # 0 = Green, 1 = Red
         self.pipe_width = 100
         self.gap_height = 220  # default = 220
         self.min_pipe_height = 50

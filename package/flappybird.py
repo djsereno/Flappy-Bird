@@ -8,17 +8,13 @@
 #
 # Future updates or improvements:
 #   - Leaderboard
-#   - Functionality for different backgrounds, pipe colors, bird colors
 #   - Window scaling
 
 # Allow for type hinting while preventing circular imports
 from __future__ import annotations
-from email.headerregistry import Group
 from typing import TYPE_CHECKING, List
 
 # Import standard modules
-import sys
-import random
 
 # Import non-standard modules
 import pygame as pg
@@ -26,16 +22,11 @@ import pygame as pg
 # Import local classes and methods
 from settings import Settings
 from bird import Bird
-from pipe import Pipe
 from button import Button
 from stats import Stats
 from splash import Splash
 from scroll_element import ScrollElem
 import game_functions as gf
-
-# Import local class and methods that are only used for type hinting
-if TYPE_CHECKING:
-    pass
 
 
 def runPyGame():
@@ -63,7 +54,7 @@ def runPyGame():
 
     # Create pipes
     pipes = pg.sprite.Group()
-    gf.create_new_pipes(pipes, screen, settings)
+    # gf.create_new_pipes(pipes, screen, settings)
 
     # Create background and ground elements
     background = ScrollElem(settings.bg_imgs, 0, settings.bg_velocity, screen)

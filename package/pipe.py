@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 class Pipe(Sprite):
     """A class for the pipes"""
 
-    def __init__(self, gap_y: int, location: str, screen: pg.Surface, settings: Settings):
+    def __init__(self, gap_y: int, location: int, screen: pg.Surface, settings: Settings):
         """Initialize the pipe's settings"""
 
         super(Pipe, self).__init__()
@@ -32,28 +32,28 @@ class Pipe(Sprite):
         self.y = gap_y
         self.velocity = settings.world_velocity
         self.gap_height = settings.gap_height
-        self.location = location
+        self.location = location # 0 = Bottom, 1 = Top
 
         # Image
-        self.color = 0 # 0 = Green, 1 = Red
-        self.images: List[pg.Surface] = settings.pipe_imgs
-        self.image: pg.Surface = self.images[self.color]
+        self.color = settings.pipe_color
+        self.images: List[List[pg.Surface]] = settings.pipe_imgs
+        self.image: pg.Surface = self.images[self.location][self.color]
         self.rect: pg.Rect = self.image.get_rect()
         self.mask = pg.mask.from_surface(self.image)
         # pg.draw.lines(self.image, (255, 0, 255), True, self.mask.outline())
 
-        if location == 'top':
-            self.image = pg.transform.flip(self.image, False, True)
+        if location == 1:
+            # self.image = pg.transform.flip(self.image, False, True)
             self.rect.centerx = self.x
             self.rect.bottom = self.y - self.gap_height / 2
         else:
             self.rect.centerx = self.x
             self.rect.top = self.y + self.gap_height / 2
 
-    def change_color(self):
-        """Changes the pipe color by updating the index within the images list"""
-        self.color = (self.color + 1) % len(self.images)
-        self.image = self.images[self.color]
+    # def change_color(self):
+    #     """Changes the pipe color by updating the index within the images list"""
+    #     self.color = (self.color + 1) % len(self.images[0])
+    #     self.image = self.images[self.location][self.color]
     
     def update(self, dt: int):
         """Update the pipe's location"""

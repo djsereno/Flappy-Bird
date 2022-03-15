@@ -37,7 +37,7 @@ def check_events(bird: Bird, pipes: pg.sprite.Group, background: ScrollElem, but
 
         # Check if user clicks
         elif event.type == pg.KEYDOWN:
-            check_keydown_events(bird, event, settings)
+            check_keydown_events(bird, pipes, event, screen, settings)
 
         elif event.type == pg.KEYUP:
             check_keyup_events(event)
@@ -54,21 +54,22 @@ def check_click_events(buttons: pg.sprite.Group, bird: Bird, pipes: pg.sprite.Gr
     mouse_pos = pg.mouse.get_pos()
 
     if settings.current_state in ['SPLASH', 'READY']:
-        
+
         # Start the game if in READY mode
         if left and settings.current_state == 'READY':
-            start_game(settings)
-        
+            start_game(pipes, screen, settings)
+
         # Change bird color
         elif right:
             bird.change_color()
-        
+
         # Change background night/day and pipe color
         elif middle:
             background.change_scene()
-            pipe: Pipe
-            for pipe in pipes:
-                pipe.change_color()
+            settings.pipe_color = (settings.pipe_color + 1) % len(settings.pipe_imgs[0])
+            # pipe: Pipe
+            # for pipe in pipes:
+            #     pipe.change_color()
             settings.sfx_swoosh.stop()
             settings.sfx_swoosh.play()
 
@@ -87,7 +88,8 @@ def check_click_events(buttons: pg.sprite.Group, bird: Bird, pipes: pg.sprite.Gr
                     reset_game(bird, pipes, buttons, screen, stats, settings)
 
 
-def check_keydown_events(bird: Bird, event: pg.event.Event, settings: Settings):
+def check_keydown_events(bird: Bird, pipes: pg.sprite.Group, event: pg.event.Event, screen: pg.Surface,
+                         settings: Settings):
     """Respond to keypresses"""
 
     # Quit the game
@@ -99,7 +101,7 @@ def check_keydown_events(bird: Bird, event: pg.event.Event, settings: Settings):
 
         # Start the game if in READY mode
         if settings.current_state == 'READY':
-            start_game(settings)
+            start_game(pipes, screen, settings)
 
         if settings.current_state == 'PLAY':
             bird.flap()
@@ -108,6 +110,20 @@ def check_keydown_events(bird: Bird, event: pg.event.Event, settings: Settings):
 def check_keyup_events(event: pg.event.Event):
     """Respond to key releases"""
     return
+
+
+def change_world_scene(settings: Settings):
+    """Updates the background and pipe colors"""
+
+    # Update the pipe images
+    settings.pipe_color = (settings.pipe_color + 1) % len(settings.pipe_imgs[0])
+
+    # Update the background images
+    settings.scene = (settings.scene + 1) % len(settings.bg_imgs)
+
+    # Play sound effects
+    settings.sfx_swoosh.stop()
+    settings.sfx_swoosh.play()
 
 
 def update_world(pipes: Pipe, background: ScrollElem, ground: ScrollElem, dt: int, screen: pg.Surface,
@@ -209,10 +225,10 @@ def create_new_pipes(pipes: pg.sprite.Group, screen: pg.Surface, settings: Setti
     """Creates a new randomized pair of pipes and adds them to pipe sprite group"""
 
     gap_y = random.randint(settings.gap_y_min, settings.gap_y_max)
-    top_pipe = Pipe(gap_y, 'top', screen, settings)
-    bot_pipe = Pipe(gap_y, 'bottom', screen, settings)
-    pipes.add(top_pipe)
+    bot_pipe = Pipe(gap_y, 0, screen, settings)
+    top_pipe = Pipe(gap_y, 1, screen, settings)
     pipes.add(bot_pipe)
+    pipes.add(top_pipe)
 
 
 def check_score(bird: Bird, pipes: pg.sprite.Group, stats: Stats):
@@ -221,7 +237,7 @@ def check_score(bird: Bird, pipes: pg.sprite.Group, stats: Stats):
     pipe: Pipe
     for pipe in pipes:
         if bird.rect.left > pipe.rect.right and pipe not in stats.pipes_cleared \
-            and pipe.location == 'top':
+            and pipe.location == 0:
 
             stats.pipes_cleared.add(pipe)
             stats.increase_score()
@@ -259,16 +275,17 @@ def reset_game(bird: Bird, pipes: pg.sprite.Group, buttons: pg.sprite.Group, scr
     stats.init_dynamic_variables()
     bird.init_dynamic_variables()
     pipes.empty()
-    create_new_pipes(pipes, screen, settings)
+    # create_new_pipes(pipes, screen, settings)
 
     button: Button
     for button in buttons:
         button.init_dynamic_variables()
 
 
-def start_game(settings: Settings):
+def start_game(pipes: pg.sprite.Group, screen: pg.Surface, settings: Settings):
     """Starts the game"""
     settings.current_state = 'PLAY'
+    create_new_pipes(pipes, screen, settings)
 
 
 def clamp(value, min_val, max_val):
