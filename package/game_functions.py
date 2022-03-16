@@ -11,16 +11,16 @@ import os
 import pygame as pg
 
 # Import local classes and methods
-from pipe import Pipe
+from .pipe import Pipe
 
 # Import local class and methods that are only used for type hinting
 if TYPE_CHECKING:
-    from bird import Bird
-    from settings import Settings
-    from button import Button
-    from stats import Stats
-    from splash import Splash
-    from scroll_element import ScrollElem
+    from .bird import Bird
+    from .settings import Settings
+    from .button import Button
+    from .stats import Stats
+    from .splash import Splash
+    from .scroll_element import ScrollElem
 
 
 def check_events(bird: Bird, pipes: pg.sprite.Group, background: ScrollElem, buttons: Button, screen: pg.Surface,
@@ -314,11 +314,15 @@ def load_image(file_name: str, scale: float, path: str, color_key: pg.Color = No
     return image
 
 
-def load_sound(file_name: str, path: str):
-    """Loads a sound (file_name) saved at path and returns the resulting sound."""
+def load_sound(file_name: str, path: str, group: List[pg.mixer.Sound] = -1):
+    """Loads a sound (file_name) saved at path and returns the resulting sound. If a group has been included, the sound will be added to that group."""
 
     full_path = os.path.abspath(os.path.join(path, file_name))
     sound = pg.mixer.Sound(full_path)
+
+    if group != -1:
+        group.append(sound)
+
     return sound
 
 
@@ -332,6 +336,13 @@ def scale_image(image: pg.Surface, scale: float, color_key: pg.Color = None):
         image.set_colorkey(color_key)
     return image
 
+
+def update_volume(sounds: List[pg.mixer.Sound], volume: float):
+    """Sets the volume for all elements in a given sound bank"""
+    
+    volume = clamp(volume, 0.0, 1.0)
+    for sound in sounds:
+        sound.set_volume(volume)
 
 def translate(val, in_min, in_max, out_min, out_max):
     """Translates or maps a value from one range [in_min, in_max] to a resulting

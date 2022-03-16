@@ -12,7 +12,7 @@ from pygame.sprite import Sprite
 
 # Import local class and methods that are only used for type hinting
 if TYPE_CHECKING:
-    from settings import Settings
+    from .settings import Settings
 
 
 class Pipe(Sprite):

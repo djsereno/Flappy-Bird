@@ -9,7 +9,7 @@ import pygame as pg
 from pygame.sprite import Sprite
 
 # Import local classes and methods
-import game_functions as gf
+from .game_functions import *
 
 # Import local class and methods that are only used for type hinting
 if TYPE_CHECKING:
@@ -36,7 +36,7 @@ class Button(Sprite):
         self.rect.center = self.location
 
         hover_scale = 1.1
-        self.image_hover = gf.scale_image(self.image, hover_scale)
+        self.image_hover = scale_image(self.image, hover_scale)
         self.rect_hover = self.image_hover.get_rect()
         self.rect_hover.center = self.location
         self.hover = False

@@ -9,7 +9,7 @@ import pygame as pg
 from pygame.sprite import Sprite
 
 # Import local classes and methods
-import game_functions as gf
+from .game_functions import *
 
 # Import local class and methods that are only used for type hinting
 if TYPE_CHECKING:
@@ -51,13 +51,13 @@ class Splash(Sprite):
             self.animation_time[0] += dt
         # Fade-in
         elif not self.fade_in:
-            self.fade_in = gf.fade_surface(self.image, 255, self.fade_speed)
+            self.fade_in = fade_surface(self.image, 255, self.fade_speed)
         # Display splash / delay before fade out
         elif self.animation_time[1] < self.delay[1]:
             self.animation_time[1] += dt
         # Fade-out
         elif not self.fade_out:
-            self.fade_out = gf.fade_surface(self.image, 0, -self.fade_speed)
+            self.fade_out = fade_surface(self.image, 0, -self.fade_speed)
         # Delay after fade out
         elif self.animation_time[2] < self.delay[2]:
             self.animation_time[2] += dt

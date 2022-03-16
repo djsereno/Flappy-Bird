@@ -9,7 +9,7 @@ import os
 import pygame as pg
 
 # Import local classes and methods
-import game_functions as gf
+from .game_functions import *
 
 # Import local class and methods that are only used for type hinting
 if TYPE_CHECKING:
@@ -31,10 +31,20 @@ class Settings():
         self.root = os.path.abspath(os.path.join(__file__, '../..'))
         self.images_dir = os.path.abspath(os.path.join(self.root, 'assets/images'))
         self.sounds_dir = os.path.abspath(os.path.join(self.root, 'assets/sounds'))
+        print(self.root)
+        print(self.images_dir)
+        print(self.sounds_dir)
 
+        # Load assets
         self.img_scale = 3
         self.load_image_assets()
         self.load_sound_assets()
+
+        # Set sound volume
+        self.music_vol = 0.5
+        self.sfx_vol = 1.0
+        update_volume(self.music_bank, self.music_vol)
+        update_volume(self.sfx_bank, self.sfx_vol)
 
         # World settings
         self.gravity = 0.5 * 3600 / 1000000  # default = 0.5
@@ -86,9 +96,9 @@ class Settings():
         self.game_over_rect = self.game_over_img.get_rect()
         self.game_over_rect.midbottom = self.screen_width // 2, 250
 
-        self.big_nums_imgs = gf.load_frames(self.big_nums_sheet, 10, PINK)
-        self.small_nums_imgs = gf.load_frames(self.small_nums_sheet, 10, PINK)
-        self.medal_imgs = gf.load_frames(self.medal_sheet, 4, PINK)
+        self.big_nums_imgs = load_frames(self.big_nums_sheet, 10, PINK)
+        self.small_nums_imgs = load_frames(self.small_nums_sheet, 10, PINK)
+        self.medal_imgs = load_frames(self.medal_sheet, 4, PINK)
         self.game_states = ('SPLASH', 'READY', 'PLAY', 'GAMEOVER')
 
         self.dimmer = pg.Surface((self.screen_width, self.screen_height), pg.SRCALPHA)
@@ -120,51 +130,51 @@ class Settings():
         """Load the game's image assets"""
 
         # Game images
-        self.bg_img_day = gf.load_image('background_day.png', self.img_scale, self.images_dir)
-        self.bg_img_night = gf.load_image('background_night.png', self.img_scale, self.images_dir)
+        self.bg_img_day = load_image('background_day.png', self.img_scale, self.images_dir)
+        self.bg_img_night = load_image('background_night.png', self.img_scale, self.images_dir)
 
-        self.ground_img = gf.load_image('ground.png', self.img_scale, self.images_dir)
+        self.ground_img = load_image('ground.png', self.img_scale, self.images_dir)
 
-        self.bird_sheet_yellow = gf.load_image('bird_sheet_yellow.png', self.img_scale, self.images_dir)
-        self.bird_frames_yellow = gf.load_frames(self.bird_sheet_yellow, 3, BLACK)
-        self.bird_sheet_red = gf.load_image('bird_sheet_red.png', self.img_scale, self.images_dir)
-        self.bird_frames_red = gf.load_frames(self.bird_sheet_red, 3, BLACK)
-        self.bird_sheet_blue = gf.load_image('bird_sheet_blue.png', self.img_scale, self.images_dir)
-        self.bird_frames_blue = gf.load_frames(self.bird_sheet_blue, 3, BLACK)
+        self.bird_sheet_yellow = load_image('bird_sheet_yellow.png', self.img_scale, self.images_dir)
+        self.bird_frames_yellow = load_frames(self.bird_sheet_yellow, 3, BLACK)
+        self.bird_sheet_red = load_image('bird_sheet_red.png', self.img_scale, self.images_dir)
+        self.bird_frames_red = load_frames(self.bird_sheet_red, 3, BLACK)
+        self.bird_sheet_blue = load_image('bird_sheet_blue.png', self.img_scale, self.images_dir)
+        self.bird_frames_blue = load_frames(self.bird_sheet_blue, 3, BLACK)
 
-        self.pipe_img_green = gf.load_image('pipe_green.png', self.img_scale, self.images_dir)
-        self.pipe_img_red = gf.load_image('pipe_red.png', self.img_scale, self.images_dir)
+        self.pipe_img_green = load_image('pipe_green.png', self.img_scale, self.images_dir)
+        self.pipe_img_red = load_image('pipe_red.png', self.img_scale, self.images_dir)
 
         # Scoreboard images
-        self.score_plaque_img = gf.load_image('score_plaque.png', self.img_scale, self.images_dir, PINK)
-        self.big_nums_sheet = gf.load_image('numbers_big.png', self.img_scale, self.images_dir)
-        self.small_nums_sheet = gf.load_image('numbers_small.png', self.img_scale, self.images_dir)
-        self.medal_sheet = gf.load_image('medal_sheet.png', self.img_scale, self.images_dir)
-        self.new_high_score_img = gf.load_image('new.png', self.img_scale, self.images_dir)
+        self.score_plaque_img = load_image('score_plaque.png', self.img_scale, self.images_dir, PINK)
+        self.big_nums_sheet = load_image('numbers_big.png', self.img_scale, self.images_dir)
+        self.small_nums_sheet = load_image('numbers_small.png', self.img_scale, self.images_dir)
+        self.medal_sheet = load_image('medal_sheet.png', self.img_scale, self.images_dir)
+        self.new_high_score_img = load_image('new.png', self.img_scale, self.images_dir)
 
         # UI Images
-        self.icon = gf.load_image('bird_icon.png', self.img_scale, self.images_dir)
-        self.splash_img = gf.load_image('splash.png', self.img_scale, self.images_dir)
-        self.get_ready_img = gf.load_image('get_ready.png', self.img_scale, self.images_dir)
-        self.game_over_img = gf.load_image('game_over.png', self.img_scale, self.images_dir)
-        self.idle_msg_img = gf.load_image('click_mouse.png', self.img_scale, self.images_dir, PINK)
+        self.icon = load_image('bird_icon.png', self.img_scale, self.images_dir)
+        self.splash_img = load_image('splash.png', self.img_scale, self.images_dir)
+        self.get_ready_img = load_image('get_ready.png', self.img_scale, self.images_dir)
+        self.game_over_img = load_image('game_over.png', self.img_scale, self.images_dir)
+        self.idle_msg_img = load_image('click_mouse.png', self.img_scale, self.images_dir, PINK)
 
         # Buttons
-        self.play_button_img = gf.load_image('play_button.png', self.img_scale, self.images_dir, PINK)
-        self.leader_button_img = gf.load_image('leaderboard_button.png', self.img_scale, self.images_dir, PINK)
+        self.play_button_img = load_image('play_button.png', self.img_scale, self.images_dir, PINK)
+        self.leader_button_img = load_image('leaderboard_button.png', self.img_scale, self.images_dir, PINK)
 
     def load_sound_assets(self):
         """Load the game's sound assets"""
 
-        self.sfx_fall = gf.load_sound('sfx_fall_delayed.wav', self.sounds_dir)
-        self.sfx_hit = gf.load_sound('sfx_hit.wav', self.sounds_dir)
-        self.sfx_point = gf.load_sound('sfx_point.wav', self.sounds_dir)
-        self.sfx_swoosh = gf.load_sound('sfx_swoosh.wav', self.sounds_dir)
-        self.sfx_flap = gf.load_sound('sfx_flap.wav', self.sounds_dir)
-        self.sfx_pop = gf.load_sound('sfx_pop.wav', self.sounds_dir)
-        self.sfx_music = gf.load_sound('sfx_music.wav', self.sounds_dir)
-        self.sfx_music_end = gf.load_sound('sfx_music_end.wav', self.sounds_dir)
+        self.sfx_bank = []
+        self.music_bank = []
 
-        # Set music volume
-        self.sfx_music.set_volume(0.5)
-        self.sfx_music_end.set_volume(0.5)
+        self.sfx_fall = load_sound('sfx_fall_delayed.wav', self.sounds_dir, self.sfx_bank)
+        self.sfx_hit = load_sound('sfx_hit.wav', self.sounds_dir, self.sfx_bank)
+        self.sfx_point = load_sound('sfx_point.wav', self.sounds_dir, self.sfx_bank)
+        self.sfx_swoosh = load_sound('sfx_swoosh.wav', self.sounds_dir, self.sfx_bank)
+        self.sfx_flap = load_sound('sfx_flap.wav', self.sounds_dir, self.sfx_bank)
+        self.sfx_pop = load_sound('sfx_pop.wav', self.sounds_dir, self.sfx_bank)
+
+        self.sfx_music = load_sound('sfx_music.wav', self.sounds_dir, self.music_bank)
+        self.sfx_music_end = load_sound('sfx_music_end.wav', self.sounds_dir, self.music_bank)

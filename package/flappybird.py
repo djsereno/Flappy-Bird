@@ -19,13 +19,13 @@ from __future__ import annotations
 import pygame as pg
 
 # Import local classes and methods
-from settings import Settings
-from bird import Bird
-from button import Button
-from stats import Stats
-from splash import Splash
-from scroll_element import ScrollElem
-import game_functions as gf
+from .settings import Settings
+from .bird import Bird
+from .button import Button
+from .stats import Stats
+from .splash import Splash
+from .scroll_element import ScrollElem
+from .game_functions import *
 
 
 def runPyGame():
@@ -76,8 +76,8 @@ def runPyGame():
     # Main game loop
     dt = 1 / fps
     while True:
-        gf.check_events(bird, pipes, background, buttons, screen, stats, settings)
-        gf.update_world(pipes, background, ground, dt, screen, settings)
+        check_events(bird, pipes, background, buttons, screen, stats, settings)
+        update_world(pipes, background, ground, dt, screen, settings)
         bird.update(dt, settings)
 
         if settings.current_state == 'SPLASH':
@@ -87,10 +87,10 @@ def runPyGame():
 
         # Collisions and score only need to be checked in PLAY state
         elif settings.current_state == 'PLAY':
-            gf.check_collisions(bird, pipes, stats, settings)
-            gf.check_score(bird, pipes, stats)
+            check_collisions(bird, pipes, stats, settings)
+            check_score(bird, pipes, stats)
 
-        gf.draw(dt, bird, pipes, background, ground, buttons, screen, stats, settings, splash)
+        draw(dt, bird, pipes, background, ground, buttons, screen, stats, settings, splash)
         dt = fpsClock.tick(fps)
 
 
