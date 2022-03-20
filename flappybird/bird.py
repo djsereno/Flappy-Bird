@@ -11,11 +11,11 @@ import pygame as pg
 from pygame.sprite import Sprite
 
 # Import local classes and methods
-from .game_functions import *
+import helper_functions as hf
 
 # Import local class and methods that are only used for type hinting
 if TYPE_CHECKING:
-    from .settings import Settings
+    from settings import Settings
 
 
 class Bird(Sprite):
@@ -106,11 +106,11 @@ class Bird(Sprite):
             # Update the bird's velocity and position
             if self.y < settings.ground_elev:
                 new_velocity = self.velocity + self.accel * dt
-                self.velocity = clamp(new_velocity, -self.max_velocity, self.max_velocity)
+                self.velocity = hf.clamp(new_velocity, -self.max_velocity, self.max_velocity)
                 self.y += self.velocity * dt
 
                 # Rotate the bird based on previous jump elevation
-                self.angle = translate(self.y, self.prev_jump_elev, self.prev_jump_elev + 150, 20, -90)
+                self.angle = hf.translate(self.y, self.prev_jump_elev, self.prev_jump_elev + 150, 20, -90)
 
         # Update the rect
         self.image = pg.transform.rotate(self.image_orig, self.angle)

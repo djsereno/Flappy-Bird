@@ -9,11 +9,11 @@ import pygame as pg
 from pygame.sprite import Sprite
 
 # Import local classes and methods
-from .game_functions import *
+import helper_functions as hf
 
 # Import local class and methods that are only used for type hinting
 if TYPE_CHECKING:
-    from .settings import Settings
+    from settings import Settings
 
 
 class Stats(Sprite):
@@ -138,7 +138,7 @@ class Stats(Sprite):
             self.current_time += dt
             y_off = ((self.fade_in_time - self.current_time) / self.fade_in_time) * 20
             self.plaque_rect.centery = self.screen.get_height() // 2 - y_off
-            alpha = translate(self.current_time, 0, self.fade_in_time, 0, 255)
+            alpha = hf.translate(self.current_time, 0, self.fade_in_time, 0, 255)
             self.plaque.set_alpha(alpha)
         else:
             self.animating = False

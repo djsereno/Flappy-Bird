@@ -1,4 +1,4 @@
-from package.flappybird import runPyGame
+from flappybird.flappybird import run_pygame
 
-if __name__ == 'runPyGame':
-    runPyGame()
+if __name__ == '__main__':
+    run_pygame()

@@ -7,6 +7,7 @@
 # Music curtesy of Minetrackmania, https://www.youtube.com/watch?v=vLVRmC-q9Oc&ab_channel=DaviddTech
 #
 # Future updates or improvements:
+#   - UI for SFX/music volume control
 #   - Leaderboard
 #   - Window scaling
 
@@ -19,16 +20,16 @@ from __future__ import annotations
 import pygame as pg
 
 # Import local classes and methods
-from .settings import Settings
-from .bird import Bird
-from .button import Button
-from .stats import Stats
-from .splash import Splash
-from .scroll_element import ScrollElem
-from .game_functions import *
+from settings import Settings
+from bird import Bird
+from button import Button
+from stats import Stats
+from splash import Splash
+from scroll_element import ScrollElem
+import game_functions as gf
 
 
-def runPyGame():
+def run_pygame():
 
     # Initialise PyGame
     pg.init()
@@ -76,8 +77,8 @@ def runPyGame():
     # Main game loop
     dt = 1 / fps
     while True:
-        check_events(bird, pipes, background, buttons, screen, stats, settings)
-        update_world(pipes, background, ground, dt, screen, settings)
+        gf.check_events(bird, pipes, background, buttons, screen, stats, settings)
+        gf.update_world(pipes, background, ground, dt, screen, settings)
         bird.update(dt, settings)
 
         if settings.current_state == 'SPLASH':
@@ -87,11 +88,12 @@ def runPyGame():
 
         # Collisions and score only need to be checked in PLAY state
         elif settings.current_state == 'PLAY':
-            check_collisions(bird, pipes, stats, settings)
-            check_score(bird, pipes, stats)
+            gf.check_collisions(bird, pipes, stats, settings)
+            gf.check_score(bird, pipes, stats)
 
-        draw(dt, bird, pipes, background, ground, buttons, screen, stats, settings, splash)
+        gf.draw(dt, bird, pipes, background, ground, buttons, screen, stats, settings, splash)
         dt = fpsClock.tick(fps)
 
 
-runPyGame()
+if __name__ == '__main__':
+    run_pygame()
