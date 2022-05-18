@@ -17,7 +17,7 @@ If the copyright holder would like for the assets to be removed, please open an 
 <br />
 <div align="center">
   <a href="https://github.com/djsereno/Flappy-Bird/">
-    <img src="images/flappy_bird_logo.png" alt="Logo" width="80" height="80">
+    <img src="images/flappy_bird_logo.png" alt="Logo" width="200" height="200">
   </a>
 
 <h3 align="center">Flappy Bird Clone</h3>
