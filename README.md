@@ -55,8 +55,8 @@ Flappy Bird is an arcade-style endless runner game. The player controls a bird b
 
 ### Built With
 
-- [Python](https://www.python.org/)
-- [PyGame](https://www.pygame.org/)
+* [Python](https://www.python.org/)
+* [PyGame](https://www.pygame.org/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
