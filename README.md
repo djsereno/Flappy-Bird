@@ -51,7 +51,7 @@
     <img src="images/title.gif" alt="Logo" width="300">
 </div>
 
-Flappy Bird is an arcade-style endless runner game. The player controls a bird by flying through through pairs of pipes that have equally sized gaps placed at random heights. Each successful pass through a pair of pipes awards the player a point. Colliding with a pipe, top of screen, or the ground ends the round!
+Flappy Bird is an arcade-style endless runner game. The player controls a bird by flying through pairs of pipes that have equally sized gaps placed at random heights. Each successful pass through a pair of pipes awards the player a point. Colliding with a pipe, top of screen, or the ground ends the round!
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -130,14 +130,6 @@ Don't forget to give the project a star! Thanks again!
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-<!-- LICENSE -->
-
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
