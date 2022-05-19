@@ -47,7 +47,9 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<div align="center">
+    <img src="images/title.gif" alt="Logo" width="300">
+</div>
 
 Flappy Bird is an arcade-style endless runner game. The player controls a bird by flying through through pairs of pipes that have equally sized gaps placed at random heights. Each successful pass through a pair of pipes awards the player a point. Colliding with a pipe, top of screen, or the ground ends the round!
 
@@ -75,26 +77,29 @@ Flappy Bird is an arcade-style endless runner game. The player controls a bird b
 
 ## Usage
 
-Click the `left mouse button` or `space bar` to flap.
+Click the `left mouse button` or `space bar` to flap. Avoid the pipes, ground, and top of screen!
 
-<img src="images/flappy_bird_logo.png" alt="Logo" width="200" height="200">
+<div align="center">
+    <img src="images/gameplay.gif" alt="Logo" width="300">
+</div>
 
-Avoid the pipes, ground, and top of screen.
+Try to beat your high score!</br></br>
 
-<img src="images/flappy_bird_logo.png" alt="Logo" width="200" height="200">
+<div align="center">
+    <img src="images/gameover.gif" alt="Logo" width="300">
+</div>
 
-Rinse and repeat. Try to beat your previous high score!</br></br>
 Scoring: 
 - 10 points = Bronze
 - 20 points = Silver
 - 30 points = Gold
 - 40+ points = Platinum
 
-<img src="images/flappy_bird_logo.png" alt="Logo" width="200" height="200">
-
 Bonus! At the home screen, click the `right mouse button` to change the bird color, and click the `middle mouse button` to change the time of day.
 
-<img src="images/flappy_bird_logo.png" alt="Logo" width="200" height="200">
+<div align="center">
+    <img src="images/skinchange.gif" alt="Logo" width="300">
+</div>
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
