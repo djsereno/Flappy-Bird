@@ -1,15 +1,4 @@
-# Flappy-Bird
-
-<h2>Notice</h2>
-
-The Flappy Bird assets and the Flappy Bird name are the work and copyright of original creator Dong Nguyen and .GEARS 
-games (http://www.dotgears.com/). Their use herein are for non-commercial use only.
-
-I took this Tweet (https://twitter.com/dongatory/status/431060041009856512 / http://i.imgur.com/AcyWyqf.png) by Dong Nguyen, the 
-creator of the game, as an open invitation to reuse the game concept and assets for use in a personal non-commercial project. There is no intention to 
-steal the game, or claim the Flappy Bird name as my own.
-
-If the copyright holder would like for the assets to be removed, please open an issue to start the conversation.
+# Flappy Bird Clone
 
 <div id="top"></div>
 
@@ -17,26 +6,21 @@ If the copyright holder would like for the assets to be removed, please open an 
 <br />
 <div align="center">
   <a href="https://github.com/djsereno/Flappy-Bird/">
-    <img src="images/flappy_bird_logo.png" alt="Logo" width="80" height="80">
+    <img src="images/flappy_bird_logo.png" alt="Logo" width="200" height="200">
   </a>
 
 <h3 align="center">Flappy Bird Clone</h3>
 
   <p align="center">
-    project_description
+    A python clone of the popular arcade-style game, Flappy Bird!
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/djsereno/Flappy-Bird"><strong>Explore the docs »</strong></a>
     <br />
-    <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <a href="https://github.com/djsereno/Flappy-Bird/issues">Report Bug</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
+    <a href="https://github.com/djsereno/Flappy-Bird/issues">Request Feature</a>
   </p>
 </div>
-
-
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -48,113 +32,90 @@ If the copyright holder would like for the assets to be removed, please open an 
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
+    <li><a href="#installation">Installation</a></li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#notice">Notice</a></li>
   </ol>
 </details>
 
-
-
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+Flappy Bird is an arcade-style endless runner game. The player controls a bird by flying through through pairs of pipes that have equally sized gaps placed at random heights. Each successful pass through a pair of pipes awards the player a point. Colliding with a pipe, top of screen, or the ground ends the round!
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 ### Built With
 
-* [Next.js](https://nextjs.org/)
-* [React.js](https://reactjs.org/)
-* [Vue.js](https://vuejs.org/)
-* [Angular](https://angular.io/)
-* [Svelte](https://svelte.dev/)
-* [Laravel](https://laravel.com)
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
+- [Python](https://www.python.org/)
+- [PyGame](https://www.pygame.org/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 <!-- GETTING STARTED -->
-## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+## Installation
 
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Installation
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/github_username/repo_name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+1. Download the [Flappy Bird.zip](https://github.com/djsereno/Flappy-Bird/blob/main/Flappy%20Bird.zip) file.
+2. Extract the contents to a new folder.
+3. Run the `Flappy Bird.exe` file.
+    - Note: The `Flappy Bird.exe` file and `assets` folder must be contained within the same folder to work.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 <!-- USAGE EXAMPLES -->
+
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Click the `left mouse button` or `space bar` to flap.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+<img src="images/flappy_bird_logo.png" alt="Logo" width="200" height="200">
+
+Avoid the pipes, ground, and top of screen.
+
+<img src="images/flappy_bird_logo.png" alt="Logo" width="200" height="200">
+
+Rinse and repeat. Try to beat your previous high score!</br></br>
+Scoring: 
+- 10 points = Bronze
+- 20 points = Silver
+- 30 points = Gold
+- 40+ points = Platinum
+
+<img src="images/flappy_bird_logo.png" alt="Logo" width="200" height="200">
+
+Bonus! At the home screen, click the `right mouse button` to change the bird color, and click the `middle mouse button` to change the time of day.
+
+<img src="images/flappy_bird_logo.png" alt="Logo" width="200" height="200">
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
 <!-- ROADMAP -->
+
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [x] Alternate backgrounds and skins
+- [ ] Leaderboard implementation
+- [ ] UI for SFX/music volume control
+- [ ] Window scaling
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/djsereno/Flappy-Bird/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 <!-- CONTRIBUTING -->
-## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+## Contributing
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
@@ -167,52 +128,58 @@ Don't forget to give the project a star! Thanks again!
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 <!-- LICENSE -->
+
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 <!-- CONTACT -->
+
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Derek Sereno - [LinkedIn](https://www.linkedin.com/in/dereksereno/) - [Email](mailto:djsereno91@gmail.com)
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: [https://github.com/djsereno/Flappy-Bird](https://github.com/djsereno/Flappy-Bird)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 <!-- ACKNOWLEDGMENTS -->
+
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+- Images courtesy of [The VG Resource](https://www.spriters-resource.com/mobile/flappybird/sheet/59894/)
+- Audio curtesy of [The VG Resource](https://www.sounds-resource.com/mobile/flappybird/sound/5309/)
+- Music curtesy of [Minetrackmania](https://www.youtube.com/watch?v=vLVRmC-q9Oc&ab_channel=DaviddTech)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+## Notice
 
+The Flappy Bird assets and the Flappy Bird name are the work and copyright of original creator Dong Nguyen and .GEARS
+games (http://www.dotgears.com/). Their use herein are for non-commercial use only.
+
+I took this Tweet (https://twitter.com/dongatory/status/431060041009856512 / http://i.imgur.com/AcyWyqf.png) by Dong Nguyen, the
+creator of the game, as an open invitation to reuse the game concept and assets for use in a personal non-commercial project. There is no intention to
+steal the game, or claim the Flappy Bird name as my own.
+
+If the copyright holder would like for the assets to be removed, please open an issue to start the conversation.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo_name/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo_name/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo_name/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: images/screenshot.png
 
+[contributors-shield]: https://img.shields.io/github/contributors/djsereno/Flappy-Bird.svg?style=for-the-badge
+[contributors-url]: https://github.com/djsereno/Flappy-Bird/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/djsereno/Flappy-Bird.svg?style=for-the-badge
+[forks-url]: https://github.com/djsereno/Flappy-Bird/network/members
+[stars-shield]: https://img.shields.io/github/stars/djsereno/Flappy-Bird.svg?style=for-the-badge
+[stars-url]: https://github.com/djsereno/Flappy-Bird/stargazers
+[issues-shield]: https://img.shields.io/github/issues/djsereno/Flappy-Bird.svg?style=for-the-badge
+[issues-url]: https://github.com/djsereno/Flappy-Bird/issues
+[license-shield]: https://img.shields.io/github/license/djsereno/Flappy-Bird.svg?style=for-the-badge
+[license-url]: https://github.com/djsereno/Flappy-Bird/blob/master/LICENSE.txt
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/dereksereno
+[product-screenshot]: images/screenshot.png
