@@ -32,6 +32,7 @@
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
+    <li><a href="#notice">Notice</a></li>
     <li><a href="#installation">Installation</a></li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
@@ -39,7 +40,6 @@
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
-    <li><a href="#notice">Notice</a></li>
   </ol>
 </details>
 
@@ -59,6 +59,19 @@ Flappy Bird is an arcade-style endless runner game. The player controls a bird b
 
 * [Python](https://www.python.org/)
 * [PyGame](https://www.pygame.org/)
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Notice
+
+The Flappy Bird assets and the Flappy Bird name are the work and copyright of original creator Dong Nguyen and .GEARS
+games (http://www.dotgears.com/). Their use herein are for non-commercial use only.
+
+I took this Tweet (https://twitter.com/dongatory/status/431060041009856512 / http://i.imgur.com/AcyWyqf.png) by Dong Nguyen, the
+creator of the game, as an open invitation to reuse the game concept and assets for use in a personal non-commercial project. There is no intention to
+steal the game, or claim the Flappy Bird name as my own.
+
+If the copyright holder would like for the assets to be removed, please open an issue to start the conversation.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -152,31 +165,3 @@ Project Link: [https://github.com/djsereno/Flappy-Bird](https://github.com/djser
 - Music curtesy of [Minetrackmania](https://www.youtube.com/watch?v=vLVRmC-q9Oc&ab_channel=DaviddTech)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-## Notice
-
-The Flappy Bird assets and the Flappy Bird name are the work and copyright of original creator Dong Nguyen and .GEARS
-games (http://www.dotgears.com/). Their use herein are for non-commercial use only.
-
-I took this Tweet (https://twitter.com/dongatory/status/431060041009856512 / http://i.imgur.com/AcyWyqf.png) by Dong Nguyen, the
-creator of the game, as an open invitation to reuse the game concept and assets for use in a personal non-commercial project. There is no intention to
-steal the game, or claim the Flappy Bird name as my own.
-
-If the copyright holder would like for the assets to be removed, please open an issue to start the conversation.
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-
-[contributors-shield]: https://img.shields.io/github/contributors/djsereno/Flappy-Bird.svg?style=for-the-badge
-[contributors-url]: https://github.com/djsereno/Flappy-Bird/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/djsereno/Flappy-Bird.svg?style=for-the-badge
-[forks-url]: https://github.com/djsereno/Flappy-Bird/network/members
-[stars-shield]: https://img.shields.io/github/stars/djsereno/Flappy-Bird.svg?style=for-the-badge
-[stars-url]: https://github.com/djsereno/Flappy-Bird/stargazers
-[issues-shield]: https://img.shields.io/github/issues/djsereno/Flappy-Bird.svg?style=for-the-badge
-[issues-url]: https://github.com/djsereno/Flappy-Bird/issues
-[license-shield]: https://img.shields.io/github/license/djsereno/Flappy-Bird.svg?style=for-the-badge
-[license-url]: https://github.com/djsereno/Flappy-Bird/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/dereksereno
-[product-screenshot]: images/screenshot.png
