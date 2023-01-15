@@ -160,7 +160,7 @@ Project Link: [https://github.com/djsereno/Flappy-Bird](https://github.com/djser
 ## Acknowledgments
 
 - Images courtesy of [The VG Resource](https://www.spriters-resource.com/mobile/flappybird/sheet/59894/)
-- Audio curtesy of [The VG Resource](https://www.sounds-resource.com/mobile/flappybird/sound/5309/)
-- Music curtesy of [Minetrackmania](https://www.youtube.com/watch?v=vLVRmC-q9Oc&ab_channel=DaviddTech)
+- Audio courtesy of [The VG Resource](https://www.sounds-resource.com/mobile/flappybird/sound/5309/)
+- Music courtesy of [Minetrackmania](https://www.youtube.com/watch?v=vLVRmC-q9Oc&ab_channel=DaviddTech)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
