@@ -12,7 +12,7 @@
 <h3 align="center">Flappy Bird Clone</h3>
 
   <p align="center">
-    A python clone of the popular arcade-style game, Flappy Bird!
+    Flap your wings and navigate through obstacles in this python clone of the popular arcade-style game, Flappy Bird.
     <br />
     <a href="https://github.com/djsereno/Flappy-Bird"><strong>Explore the docs »</strong></a>
     <br />
